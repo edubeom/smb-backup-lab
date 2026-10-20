@@ -96,6 +96,9 @@ def capture(public_only=False, tests_only=False):
                   'production_access': False, 'source_kinds': ['actual public browser recording', 'actual synthetic test output viewer', 'historical progress card', 'editorial explanation card']}
     if public_only or tests_only:
         provenance=json.loads((OUT/'sources/provenance.json').read_text())
+        # A new public-page recording does not change which code produced the
+        # preserved historical synthetic-test recording.
+        provenance['tests'].setdefault('source_public_commit',provenance['public_commit'])
         provenance['public_views_recaptured_at' if public_only else 'tests_recaptured_at']=now()
         provenance['public_url']=URL
         provenance['public_commit']=commit
@@ -181,7 +184,7 @@ def capture(public_only=False, tests_only=False):
         if proc.returncode != 0 or not result or not text.rstrip().endswith('OK'):
             raise RuntimeError('Synthetic tests failed; recording will not show success')
         provenance['tests'].update(exit_code=proc.returncode, count=int(result[1]), reported_seconds=float(result[2]),
-                                   elapsed_seconds=round(time.monotonic()-run_start, 3), finished_at=now(), transcript_sha256=sha(log_path))
+                                   elapsed_seconds=round(time.monotonic()-run_start, 3), finished_at=now(), transcript_sha256=sha(log_path),source_public_commit=commit)
         page.evaluate('t=>{let e=document.querySelector("#log");e.textContent=t;e.scrollTop=e.scrollHeight;document.querySelector("#status").textContent="종료 코드 0 · 실제 실행 결과 OK"}', text)
         page.screenshot(path=str(OUT / 'sources/tests-complete.png'))
         remaining = max(4500, int((23 - (time.monotonic()-started))*1000))
@@ -304,6 +307,10 @@ def render():
     scenes=[]; cursor=0
     for i,(source,duration,title,kind,captions) in enumerate(SCENES,1):
         s=dict(number=i,source='sources/'+source,duration=duration,start=cursor,title=title,kind=kind,captions=captions)
+        if prov.get('identity_update',{}).get('original_test_recording_preserved') and 8<=i<=13:
+            recorded=prov['tests']['started_at'][:10]
+            s['kind']='보존한 시험 · '+recorded
+            s['captions']=[t.replace('이번 촬영에서 실행한 시험','보존한 실제 시험').replace('이번 실행의','보존한 실행의').replace('이번 원본 출력','보존한 원본 출력').replace('이번 합성 시험','이 합성 시험') for t in captions]
         s['trim_start']=prov.get({'github-public.webm':'github','lecture-keys.webm':'lecture','synthetic-tests-live.webm':'tests'}.get(source,''),{}).get('trim_start',0)
         scenes.append(s);cursor+=duration
     assert sum(s['duration'] for s in scenes[:7])==90 and cursor==180
@@ -378,7 +385,7 @@ dev-process-light × smb-backup-lab. 1920×1080, 24fps, H.264/AAC MP4. 음성·�
 
 ## 출처와 확인 범위
 
-GitHub/HTML 키 조작과 합성 시험 출력은 이번 촬영입니다. 브라우저는 익명 새 컨텍스트로 열었고 GitHub는125% 확대했습니다. 시험 화면은 실제 실행의 표준 출력을 읽는 별도 보기이며 전체 원본은 synthetic-tests.txt에 있습니다. 영상에는 원래 속도의 발췌가 들어가며 끝부분의 정지 화면을 연장할 수 있습니다. 진행 카드는 당시 제작한 공개 기록으로 서버 화면 녹화가 아닙니다. 설명 카드는 공개 문서의 요약·재배치입니다. 자세한 출처와 시각은 sources/provenance.json에 있습니다.
+GitHub/HTML 키 조작은 소유자 변경 후 다시 촬영했습니다. 합성 시험은2026-10-20 촬영한 실제 실행 원본을 보존했고 장면 위에도 촬영 날짜를 표시했습니다. 보존된 화면 속의 '이번 촬영'은 그 원본 제작 시점의 표현입니다. 브라우저는 익명 새 컨텍스트로 열었고 GitHub는125% 확대했습니다. 시험 화면은 실제 실행의 표준 출력을 읽는 별도 보기이며 전체 원본은 synthetic-tests.txt에 있습니다. 영상에는 원래 속도의 발췌가 들어가며 끝부분의 정지 화면을 연장할 수 있습니다. 진행 카드는 당시 제작한 공개 기록으로 서버 화면 녹화가 아닙니다. 설명 카드는 공개 문서의 요약·재배치입니다. 자세한 출처와 시각은 sources/provenance.json에 있습니다.
 
 운영 서비스/실제 키/보호된 백업 자료는 새로 접근하지 않았습니다. 사례 상태는2026-10-20 공개 문서 기준이며 첫 예약 성공·전체 Mailu와 앱 복구를 완료했다고 표현하지 않습니다.
 
