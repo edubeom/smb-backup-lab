@@ -1,0 +1,11 @@
+{
+  "source": "public sanitized checkout actual execution",
+  "tests": 123,
+  "status": "passed",
+  "runtime_seconds": 16.451,
+  "manual_pages": 32,
+  "presentation_slides": 26,
+  "pptx_speaker_notes_verified": true,
+  "first_scheduled_backup_verified": false,
+  "full_mailu_service_restore_validated": false
+}

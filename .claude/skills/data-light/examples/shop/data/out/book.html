@@ -1,0 +1,96 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>반찬가게 주문 -- 데이터 설명서</title><style>body{margin:0;background:#f6f5f1;color:#1f2328;font:16px/1.7 "Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:28px 20px 80px}h1{font-size:28px;margin:0}h1+p{color:#5b636d;margin:4px 0 18px}
+h2{font-size:20px;margin:34px 0 10px;padding-top:14px;border-top:1px solid #dcd9d0}h3{font-size:18px;margin:26px 0 4px}h3 small{font-weight:400;color:#6b7280;font-size:13px}
+details{background:#fff;border:1px solid #dcd9d0;border-left:4px solid #2f7d6d;border-radius:6px;padding:8px 14px}summary{cursor:pointer;font-weight:600}
+table{border-collapse:collapse;width:100%;background:#fff;margin:6px 0 10px;font-size:14px}th,td{border:1px solid #e3e0d8;padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#efede6;font-weight:600}.mut{color:#6b7280}.say{font-size:17px}.tag{display:inline-block;font-size:12px;border:1px solid #c9c5ba;border-radius:10px;padding:0 8px;margin:0 4px 2px 0;background:#fff}
+.pi{color:#a3332a}.miss{color:#9a6700}ul{padding-left:22px}@media print{details{border-left-width:1px}}</style></head><body><main>
+<h1>반찬가게 주문</h1><p>데이터 설명서 -- 무엇을 기록하고, 어떤 일에 쓰고, 실제로 어떤 값이 들어가나</p>
+<details open><summary>이 문서 읽는 법</summary><ul>
+<li><b>표</b>는 엑셀 시트 하나, <b>한 줄</b>은 기록 하나(손님 한 명, 주문 한 건), <b>칸</b>은 열입니다.</li>
+<li><b>다른 표를 가리키는 칸</b>은 표끼리 잇습니다 -- 예: 주문의 '손님' 칸은 손님 표의 한 줄을 가리킵니다.</li>
+<li><b>개인정보</b>(이름·전화 …)는 짝 표에 따로 둡니다. 본 줄을 지우면 같이 지워집니다.</li>
+<li><b>알고 싶은 것</b>은 이 데이터로 꼭 나와야 하는 답입니다. 검사가 예시 값으로 실제로 돌려 봅니다.</li>
+<li><b>예시 값은 만든 값</b>입니다 (실제 사람이 아닙니다).</li></ul>
+<p><b>확인할 것</b>: 빠진 기록이나 칸이 없나요? 하는 일과 표의 연결이 실제와 같나요? 예시를 보면 이상한 곳이 있나요?</p></details>
+<h2>무엇을 만드나</h2><p class='say'><b>데이터 관리 (찾고·고치기)</b> (함께: 알고 싶은 것 보기 (분석))</p><p class='mut'>사용자가 한 말: “주문을 받아 적어 두고 찾아보고 싶어요. 손님별로 얼마 주문했는지도 보고 싶고요”</p>
+<p><b>이번에 만들지 않을 것</b>: 결제, 배송 추적, 회원 로그인</p>
+<h2>알고 싶은 것</h2><ol><li>손님별 주문 금액 합계를 볼 수 있다</li><li>판매 중인 반찬만 골라 볼 수 있다</li><li>주문 상태별 건수를 셀 수 있다</li></ol>
+<h2>하는 일</h2>
+<table><tr><th>일</th><th>누가</th><th>화면</th><th>쓰는 표</th></tr>
+<tr><td><b>주문 받기</b><div class='mut'>손님이 전화로 주문하면 반찬과 수량을 적는다</div></td><td>사장님</td><td>주문 입력</td><td>주문 -- 만들기<br>주문 항목 -- 만들기<br>손님 -- 읽기<br>반찬 -- 읽기</td></tr>
+<tr><td><b>손님 관리</b><div class='mut'>단골 손님의 별명·연락처를 적고 고친다</div></td><td>사장님</td><td>손님 목록</td><td>손님 -- 만들기·읽기·고치기<br>손님 개인정보 -- 만들기·읽기·고치기</td></tr>
+<tr><td><b>반찬 관리</b><div class='mut'>반찬과 값, 오늘 파는지를 정한다</div></td><td>사장님</td><td>반찬 목록</td><td>반찬 -- 만들기·읽기·고치기</td></tr>
+<tr><td><b>주문 상태 바꾸기</b><div class='mut'>접수 → 준비 → 전달로 상태를 바꾼다</div></td><td>사장님</td><td>주문 목록</td><td>주문 -- 읽기·고치기<br>주문 항목 -- 읽기</td></tr>
+<tr><td><b>매출 보기</b><div class='mut'>손님별·상태별 주문 금액을 본다</div></td><td>사장님</td><td>매출</td><td>주문 -- 읽기<br>주문 항목 -- 읽기<br>손님 -- 읽기</td></tr>
+</table>
+<h2>표</h2>
+<h3>손님 <small>customer</small></h3>
+<p><b>한 줄은</b> 주문하는 손님</p>
+<p><b>이 표를 쓰는 일</b>: <span class='tag'>주문 받기 · 읽기</span> <span class='tag'>손님 관리 · 만들기·읽기·고치기</span> <span class='tag'>매출 보기 · 읽기</span></p>
+<p><b>누가 쓰나</b>: 사장님</p>
+<table><tr><th>칸</th><th>종류</th><th>규칙</th></tr>
+<tr><td>손님 번호</td><td>번호(자동)</td><td>꼭 채움</td></tr>
+<tr><td>별명</td><td>글자</td><td>꼭 채움, 같은 값 두 번 금지</td></tr>
+<tr><td>등급</td><td>글자</td><td>꼭 채움, 고르기: 일반/단골</td></tr>
+<tr><td>만든 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+<tr><td>고친 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+</table>
+<p class='mut'>예시 (만든 값)</p><table><tr><th>손님 번호</th><th>별명</th><th>등급</th></tr><tr><td>1</td><td>옆집</td><td>단골</td></tr><tr><td>2</td><td>회사앞</td><td></td></tr></table>
+<h3>손님 개인정보 <small>pi_customer</small></h3>
+<p><b>한 줄은</b> 손님의 개인정보. 본 테이블과 1:1, 본 행을 지우면 같이 지워진다</p>
+<p><b>이 표를 쓰는 일</b>: <span class='tag'>손님 관리 · 만들기·읽기·고치기</span></p>
+<p><b>누가 쓰나</b>: 사장님</p>
+<p class='pi'>개인정보 짝 표 -- 손님 한 줄마다 하나, 손님 줄을 지우면 같이 지워집니다</p>
+<table><tr><th>칸</th><th>종류</th><th>규칙</th></tr>
+<tr><td>손님 번호</td><td>다른 표 가리킴</td><td>꼭 채움</td></tr>
+<tr><td>이름 <span class='pi'>(개인정보)</span></td><td>글자</td><td>꼭 채움</td></tr>
+<tr><td>전화번호 <span class='pi'>(개인정보)</span></td><td>글자</td><td></td></tr>
+<tr><td>만든 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+<tr><td>고친 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+</table>
+<p class='mut'>예시 (만든 값)</p><table><tr><th>손님 번호</th><th>이름</th><th>전화번호</th></tr><tr><td>1</td><td>김하나</td><td>010-0000-0001</td></tr><tr><td>2</td><td>이두리</td><td></td></tr></table>
+<h3>반찬 <small>dish</small></h3>
+<p><b>한 줄은</b> 파는 반찬</p>
+<p><b>이 표를 쓰는 일</b>: <span class='tag'>주문 받기 · 읽기</span> <span class='tag'>반찬 관리 · 만들기·읽기·고치기</span></p>
+<p><b>누가 쓰나</b>: 사장님</p>
+<table><tr><th>칸</th><th>종류</th><th>규칙</th></tr>
+<tr><td>반찬 번호</td><td>번호(자동)</td><td>꼭 채움</td></tr>
+<tr><td>반찬 이름</td><td>글자</td><td>꼭 채움, 같은 값 두 번 금지</td></tr>
+<tr><td>가격</td><td>금액</td><td>꼭 채움</td></tr>
+<tr><td>판매 중</td><td>예/아니오</td><td>꼭 채움</td></tr>
+<tr><td>만든 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+<tr><td>고친 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+</table>
+<p class='mut'>예시 (만든 값)</p><table><tr><th>반찬 번호</th><th>반찬 이름</th><th>가격</th><th>판매 중</th></tr><tr><td>1</td><td>멸치볶음</td><td>5000</td><td></td></tr><tr><td>2</td><td>장조림</td><td>7000</td><td>아니오</td></tr></table>
+<h3>주문 <small>orders</small></h3>
+<p><b>한 줄은</b> 손님의 주문 한 건</p>
+<p><b>이 표를 쓰는 일</b>: <span class='tag'>주문 받기 · 만들기</span> <span class='tag'>주문 상태 바꾸기 · 읽기·고치기</span> <span class='tag'>매출 보기 · 읽기</span></p>
+<p><b>누가 쓰나</b>: 사장님</p>
+<ul><li>주문 한 줄은 <b>손님</b> 한 줄을 가리킵니다 (꼭 있어야 함). 손님 줄을 지우려 하면 지우지 못하게 막습니다.</li></ul>
+<table><tr><th>칸</th><th>종류</th><th>규칙</th></tr>
+<tr><td>주문 번호</td><td>번호(자동)</td><td>꼭 채움</td></tr>
+<tr><td>주문한 손님</td><td>다른 표 가리킴</td><td>꼭 채움</td></tr>
+<tr><td>주문일</td><td>날짜</td><td>꼭 채움</td></tr>
+<tr><td>상태</td><td>글자</td><td>꼭 채움, 고르기: 접수/준비/완료/취소</td></tr>
+<tr><td>요청사항</td><td>긴 글</td><td></td></tr>
+<tr><td>만든 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+<tr><td>고친 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+</table>
+<p class='mut'>예시 (만든 값)</p><table><tr><th>주문 번호</th><th>주문한 손님</th><th>주문일</th><th>상태</th><th>요청사항</th></tr><tr><td>1</td><td>1</td><td>2026-10-14</td><td>접수</td><td></td></tr></table>
+<h3>주문 항목 <small>order_item</small></h3>
+<p><b>한 줄은</b> 주문 한 건에 담긴 반찬</p>
+<p><b>이 표를 쓰는 일</b>: <span class='tag'>주문 받기 · 만들기</span> <span class='tag'>주문 상태 바꾸기 · 읽기</span> <span class='tag'>매출 보기 · 읽기</span></p>
+<p><b>누가 쓰나</b>: 사장님</p>
+<ul><li>주문 항목 한 줄은 <b>주문</b> 한 줄을 가리킵니다 (꼭 있어야 함). 주문 줄을 지우려 하면 이 줄도 같이 지워집니다.</li><li>주문 항목 한 줄은 <b>반찬</b> 한 줄을 가리킵니다 (꼭 있어야 함). 반찬 줄을 지우려 하면 지우지 못하게 막습니다.</li></ul>
+<table><tr><th>칸</th><th>종류</th><th>규칙</th></tr>
+<tr><td>항목 번호</td><td>번호(자동)</td><td>꼭 채움</td></tr>
+<tr><td>주문</td><td>다른 표 가리킴</td><td>꼭 채움</td></tr>
+<tr><td>반찬</td><td>다른 표 가리킴</td><td>꼭 채움</td></tr>
+<tr><td>수량</td><td>정수</td><td>꼭 채움</td></tr>
+<tr><td>단가</td><td>금액</td><td>꼭 채움</td></tr>
+<tr><td>만든 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+<tr><td>고친 시각</td><td>날짜+시각</td><td>꼭 채움, 자동</td></tr>
+</table>
+<p class='mut'>예시 (만든 값)</p><table><tr><th>항목 번호</th><th>주문</th><th>반찬</th><th>수량</th><th>단가</th></tr><tr><td></td><td>1</td><td>1</td><td>2</td><td>5000</td></tr></table>
+<p class='mut'>정본 data/model.light.json 에서 만들었습니다 (data-light). 그림은 <code>datalight.py view</code>.</p></main></body></html>

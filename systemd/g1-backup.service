@@ -1,0 +1,20 @@
+[Unit]
+Description=G1 online export and encrypted daily backup
+Wants=network-online.target
+After=network-online.target
+RequiresMountsFor=/mnt/router-backup
+
+[Service]
+Type=oneshot
+User=root
+UMask=0077
+ExecStart=/usr/bin/python3 /project/smb-backup-lab/scripts/daily.py --config /etc/g1-backup/backup.json
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+# SQLite online read may need its existing shared-memory files under /project.
+# Collector destinations remain explicitly outside /project.
+# Template only. Do not install/enable until operational validation and approval.

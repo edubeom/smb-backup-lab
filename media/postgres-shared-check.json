@@ -1,0 +1,23 @@
+{
+  "evidence": "user supplied verify_postgres.py terminal result",
+  "run_id": "20261020T040000000000-1234abcd",
+  "tested_at": "2026-10-20T14:49:43.222077+09:00",
+  "status": "shared-snapshot-postgresql-restore-verified",
+  "database_count": 5,
+  "all_invalid_index_counts_zero": true,
+  "globals_restored": true,
+  "cipher_hashes_verified": true,
+  "source_container_states_unchanged": true,
+  "network": "none",
+  "host_bind_mounts": false,
+  "production_volumes_reused": false,
+  "snapshot_bytes": 3026556349,
+  "snapshot_gib": 2.819,
+  "five_similar_sets_gib": 14.094,
+  "six_similar_sets_gib": 16.912,
+  "repository_limit_gib": 50.0,
+  "offsite_key_storage": "not yet completed per operator",
+  "full_mailu_service_restore_validated": false,
+  "existing_backups_deleted": false,
+  "timer_enabled": false
+}

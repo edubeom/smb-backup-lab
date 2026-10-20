@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ERD 보기</title>
+<style nonce="__NONCE__">
+:root{
+  --font:"Pretendard","Pretendard Variable","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular","D2Coding","Consolas",monospace;
+}
+/* 다섯 가지 테마 -- 화면 틀(--ui-*)과 그림(--*) 을 함께 바꾼다 */
+.t-paper{--bg:#E8ECF0;--dot:#C9D1D9;--ui:#F7F9FA;--ui-line:#D3DAE1;--ink:#1C2632;--mute:#627285;--plate:#FFFFFF;--plate-line:#B9C3CD;--head:#F2F5F7;
+  --rel:#6F7F90;--hl:#0B7A75;--sel:#0B7A75;--frame:#FFFFFF66;--frame-line:#AEB8C2;--k-code:#9A7B2F;--k-base:#3B6A99;--k-tx:#2D7D52;--k-hist:#76589A;--k-pi:#B3383B;--k-con:#B0602A;--k-log:#4E6E8E;--bad:#B3383B}
+.t-night{--bg:#1F2835;--dot:#2E3A4A;--ui:#252F3D;--ui-line:#36445A;--ink:#E2E8F0;--mute:#93A3B8;--plate:#2B3646;--plate-line:#43536A;--head:#323F51;
+  --rel:#8798AD;--hl:#F0B84A;--sel:#F0B84A;--frame:#ffffff08;--frame-line:#3E4C61;--k-code:#D6B25E;--k-base:#6FA3D8;--k-tx:#62C08B;--k-hist:#B597DB;--k-pi:#F07A7D;--k-con:#E99A63;--k-log:#8FB0D0;--bad:#F07A7D}
+.t-blue{--bg:#1A4C84;--dot:#2B629E;--ui:#173F6C;--ui-line:#2F619A;--ink:#EEF5FF;--mute:#A9C4E4;--plate:#1D5592;--plate-line:#CFE0F5;--head:#22609F;
+  --rel:#CFE0F5;--hl:#FFD45C;--sel:#FFD45C;--frame:#ffffff0a;--frame-line:#8FB3DC;--k-code:#FFE08A;--k-base:#BFE0FF;--k-tx:#A8F0C6;--k-hist:#E2C8FF;--k-pi:#FFB0A8;--k-con:#FFC89A;--k-log:#D5E6FA;--bad:#FFB0A8}
+.t-pastel{--bg:#F3F0F8;--dot:#E0D9EC;--ui:#FBFAFD;--ui-line:#E2DCEC;--ink:#2E2840;--mute:#7A7190;--plate:#FFFFFF;--plate-line:#D6CDE6;--head:#F7F4FB;
+  --rel:#9A8FB3;--hl:#7C4DDB;--sel:#7C4DDB;--frame:#ffffff80;--frame-line:#D3C9E5;--k-code:#E0B354;--k-base:#7FA9E0;--k-tx:#6CC49A;--k-hist:#B892E6;--k-pi:#EE8A97;--k-con:#E79A6C;--k-log:#8AA4C8;--bad:#C2414F}
+.t-contrast{--bg:#FFFFFF;--dot:#FFFFFF;--ui:#FFFFFF;--ui-line:#000000;--ink:#000000;--mute:#2B2B2B;--plate:#FFFFFF;--plate-line:#000000;--head:#FFFFFF;
+  --rel:#000000;--hl:#0040E0;--sel:#0040E0;--frame:#ffffff00;--frame-line:#000000;--k-code:#7A5A00;--k-base:#003C8F;--k-tx:#005C2E;--k-hist:#56208F;--k-pi:#B00000;--k-con:#8A3A00;--k-log:#00336B;--bad:#B00000}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font:13px/1.45 var(--font);color:var(--ink);background:var(--bg);display:grid;grid-template-rows:auto 1fr;grid-template-columns:270px 1fr;overflow:hidden}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--hl);outline-offset:1px}
+header{grid-column:1/3;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:8px 14px;background:var(--ui);border-bottom:1px solid var(--ui-line)}
+header h1{font-size:15px;font-weight:700;margin:0 6px 0 0;letter-spacing:-.01em;white-space:nowrap}
+header h1 small{font-weight:400;color:var(--mute);margin-left:6px}
+.tabs{display:inline-flex;gap:2px;border-bottom:2px solid var(--ui-line)}
+.tabs[hidden],#stage-info[hidden]{display:none}
+.tabs button{border:0;background:transparent;padding:4px 12px 5px;cursor:pointer;color:var(--mute);margin-bottom:-2px;border-bottom:2px solid transparent;font-weight:600}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--hl)}
+#stage-info{font-size:12px;color:var(--mute);max-width:420px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#stage-info b{color:var(--ink);font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--ui-line);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:4px 10px;cursor:pointer;border-right:1px solid var(--ui-line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--ui)}
+.seg button:disabled{opacity:.4;cursor:default}
+.grp{display:inline-flex;align-items:center;gap:6px}
+.grp>span{color:var(--mute);font-size:12px}
+.btn{border:1px solid var(--ui-line);background:transparent;border-radius:6px;padding:4px 10px;cursor:pointer}
+.btn:hover{border-color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.due{background:var(--hl);border-color:var(--hl);color:var(--ui)}
+select{border:1px solid var(--ui-line);background:var(--ui);border-radius:6px;padding:3px 6px}
+.spacer{flex:1}
+aside{background:var(--ui);border-right:1px solid var(--ui-line);display:flex;flex-direction:column;min-height:0}
+aside .find{padding:10px 12px;border-bottom:1px solid var(--ui-line)}
+aside input[type=search]{width:100%;border:1px solid var(--ui-line);border-radius:6px;padding:5px 8px;background:var(--plate)}
+aside .pick{display:flex;gap:6px;margin-top:8px;align-items:center;font-size:12px;color:var(--mute)}
+aside .pick .seg button{padding:2px 8px;font-size:12px}
+#list{overflow:auto;flex:1;padding:4px 0 16px}
+.src{padding:10px 12px 2px;font-weight:700;font-size:12px;display:flex;justify-content:space-between;gap:6px}
+.src span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.src em{font-style:normal;font-weight:400;color:var(--mute);flex:none}
+.msg{margin:2px 12px 6px;padding:6px 8px;border-left:3px solid var(--bad);font-size:12px;color:var(--ink);background:var(--plate)}
+.msg.warn{border-left-color:var(--k-code)}
+.msg.info{border-left-color:var(--mute)}
+.sch{padding:6px 12px 2px 18px;color:var(--mute);font-size:12px}
+.item{display:flex;width:100%;align-items:center;gap:8px;text-align:left;border:0;background:transparent;padding:3px 12px 3px 18px;cursor:pointer}
+.item:hover{background:var(--head)}
+.item i{width:4px;height:14px;border-radius:1px;flex:none}
+.item b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item small{color:var(--mute);margin-left:auto;font-size:11px;white-space:nowrap}
+.item[aria-pressed=true]{background:var(--head);box-shadow:inset 3px 0 0 var(--sel)}
+.item[aria-pressed=true] b{font-weight:700}
+.item.hide{display:none}
+main{position:relative;min-width:0;min-height:0;overflow:hidden;background-color:var(--bg);background-image:radial-gradient(var(--dot) 1px,transparent 1.2px);background-size:22px 22px}
+svg#c{width:100%;height:100%;display:block;cursor:grab;touch-action:none;user-select:none}
+svg#c.panning{cursor:grabbing}
+#status{position:absolute;left:12px;bottom:10px;display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mute);background:var(--ui);border:1px solid var(--ui-line);border-radius:6px;padding:3px 9px;max-width:calc(100% - 24px)}
+#status .dot{width:7px;height:7px;border-radius:50%;background:var(--k-tx);flex:none}
+#status.off .dot{background:var(--mute)}
+#status.bad .dot{background:var(--bad)}
+#tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--ui);padding:5px 8px;border-radius:5px;font-size:12px;display:none;max-width:340px;z-index:3}
+#empty{position:absolute;inset:0;display:none;place-content:center;text-align:center;color:var(--mute);padding:20px}
+#empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+#empty span{display:block;max-width:460px}
+/* 상세 패널 -- 설명·의미·단계 간 이동 */
+#detail{position:absolute;top:10px;right:10px;bottom:46px;width:340px;max-width:calc(100% - 20px);background:var(--ui);border:1px solid var(--ui-line);border-radius:8px;
+  display:none;flex-direction:column;z-index:2;box-shadow:0 2px 10px #0002}
+#detail.on{display:flex}
+#detail header{grid-column:auto;display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-bottom:1px solid var(--ui-line)}
+#detail h2{font-size:14px;margin:0;flex:1;line-height:1.35}
+#detail h2 small{display:block;font-weight:400;color:var(--mute);font-size:12px}
+#detail .body{overflow:auto;padding:8px 12px 14px;flex:1}
+#detail p{margin:4px 0 8px;white-space:pre-line}
+#detail dl{margin:0 0 8px;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:12px}
+#detail dt{color:var(--mute)}
+#detail dd{margin:0;white-space:pre-line}
+#detail h3{font-size:12px;margin:12px 0 4px;color:var(--mute);font-weight:600}
+#detail .col{border-top:1px solid var(--ui-line);padding:6px 0}
+#detail .col b{font-weight:600}
+#detail .col code{font:11px var(--mono);color:var(--mute)}
+#detail .go{display:inline-block;border:1px solid var(--ui-line);background:var(--plate);border-radius:5px;padding:1px 7px;margin:2px 4px 2px 0;cursor:pointer;font-size:12px}
+#detail .go:hover{border-color:var(--hl)}
+#detail .none{color:var(--mute);font-style:italic}
+#detail .term{font-size:12px;border-left:2px solid var(--ui-line);padding-left:8px;margin:4px 0}
+/* 그림 */
+.frame rect{fill:var(--frame);stroke:var(--frame-line);stroke-dasharray:6 4}
+.frame text{fill:var(--mute);font:600 12px var(--font)}
+.frame text tspan.s{font-weight:400}
+.ent{cursor:pointer}
+.ent .plate{fill:var(--plate);stroke:var(--plate-line);stroke-width:1}
+.ent .head{fill:var(--head)}
+.ent .tab{fill:var(--kc)}
+.ent .sep{stroke:var(--plate-line)}
+.ent .nm{fill:var(--ink);font:700 13px var(--font)}
+.ent .ph{fill:var(--mute);font:400 11px var(--font)}
+.ent .cn{fill:var(--ink);font:400 12px var(--font)}
+.ent .cn.nn{font-weight:600}
+.ent .ct{fill:var(--mute);font:400 11px var(--mono)}
+.ent .ck{fill:var(--kc);font:700 9.5px var(--font);letter-spacing:.02em}
+.ent .cpi{fill:var(--k-pi);font:700 9.5px var(--font)}
+.ent .pin{fill:var(--mute);font:700 9.5px var(--font)}
+.ent .more{fill:var(--mute);font:italic 11px var(--font)}
+.ent.sel .plate{stroke:var(--sel);stroke-width:2.2}
+.ent.match .plate{stroke:var(--hl);stroke-dasharray:3 2}
+.k-코드{--kc:var(--k-code)}.k-기준{--kc:var(--k-base)}.k-거래{--kc:var(--k-tx)}.k-이력{--kc:var(--k-hist)}.k-PI{--kc:var(--k-pi)}.k-개념{--kc:var(--k-con)}.k-논리{--kc:var(--k-log)}
+.rel path{fill:none;stroke:var(--rel);stroke-width:1.3}
+.rel .hit{stroke:transparent;stroke-width:12;cursor:help}
+.rel circle{fill:var(--plate);stroke:var(--rel);stroke-width:1.3}
+.rel .rl{fill:var(--mute);font:400 11px var(--font);paint-order:stroke;stroke:var(--bg);stroke-width:3px}
+/* 관계선 (IE 표기): 식별 = 실선, 비식별 = 점선, 코드 참조 = 짧은 점선·흐린 색. 있어야/없어도 되는지는 끝 표시(| · ○) */
+.rel.nid .line{stroke-dasharray:6 4}
+.rel.code path:not(.hit){stroke:var(--mute)}.rel.code .line{stroke-dasharray:2 3}.rel.code circle{stroke:var(--mute)}
+aside .rk{margin-top:8px;font-size:12px;color:var(--mute)}
+aside .rk .row{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+aside .rk button{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--ui-line);background:transparent;border-radius:6px;padding:2px 7px;cursor:pointer;font-size:12px;color:var(--ink)}
+aside .rk button[aria-pressed=false]{color:var(--mute);text-decoration:line-through;opacity:.7}
+aside .rk button:disabled{opacity:.4;cursor:default;text-decoration:none}
+aside .rk button em{font-style:normal;color:var(--mute)}
+aside .rk svg{width:26px;height:8px;flex:none}
+aside .rk svg path{fill:none;stroke:var(--rel);stroke-width:1.5}
+aside .rk .code svg path{stroke:var(--mute);stroke-dasharray:2 3}
+aside .rk .nid svg path{stroke-dasharray:6 4}
+#status-rel:empty{display:none}
+#status-rel{border-left:1px solid var(--ui-line);padding-left:8px}
+.focus .ent{opacity:.28}.focus .rel{opacity:.12}
+.focus .ent.on,.focus .rel.on{opacity:1}
+.rel.on path:not(.hit),.rel.on circle{stroke:var(--hl);stroke-width:2}
+.rel.flow .line{stroke:var(--sel);stroke-width:2;stroke-dasharray:7 5;animation:flow 1.1s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-24}}
+.t-contrast .rel path{stroke-width:1.6}.t-contrast .ent .plate{stroke-width:1.4}
+@media (prefers-reduced-motion:reduce){.rel.flow .line{animation:none}}
+@media (max-width:760px){body{grid-template-columns:1fr;grid-template-rows:auto auto 1fr}aside{max-height:32vh;border-right:0;border-bottom:1px solid var(--ui-line)}header{grid-column:1}#detail{width:auto;left:10px}}
+</style>
+<script nonce="__NONCE__" src="__BASE__/erdlayout.js"></script>
+</head>
+<body class="t-paper" data-layout="idle">
+<header>
+  <h1 id="title">ERD 보기<small id="sub"></small></h1>
+  <div class="tabs" id="stages" role="tablist" aria-label="모델 단계">
+    <button role="tab" data-v="concept" aria-selected="false">개념 모델</button><button role="tab" data-v="logical" aria-selected="false">논리 모델</button><button role="tab" data-v="physical" aria-selected="true">물리 모델</button></div>
+  <span id="stage-info" aria-live="polite"></span>
+  <div class="grp"><span id="lvl-l">보기</span><div class="seg" id="level" role="group" aria-labelledby="lvl-l">
+    <button data-v="1" title="엔터티 이름만 (1)">엔터티</button><button data-v="2" title="키 컬럼 (2)">키</button><button data-v="3" title="모든 컬럼 (3)">컬럼</button><button data-v="4" title="컬럼과 자료형 (4)">타입</button></div></div>
+  <div class="grp"><span id="nm-l">이름</span><div class="seg" id="names" role="group" aria-labelledby="nm-l">
+    <button data-v="kor">논리</button><button data-v="phys">물리</button><button data-v="both">둘 다</button></div></div>
+  <div class="grp"><label for="theme"><span>테마</span></label><select id="theme">
+    <option value="paper">종이</option><option value="night">밤</option><option value="blue">청사진</option><option value="pastel">파스텔</option><option value="contrast">고대비</option></select></div>
+  <span class="spacer"></span>
+  <div class="grp"><label><input type="checkbox" id="live"> 실시간</label><button class="btn" id="apply" title="원본을 다시 읽어 그린다">적용</button></div>
+  <button class="btn" id="fit" title="화면에 맞추기 (0)">맞추기</button>
+  <div class="grp"><button class="btn" id="relayout" title="보이는 엔터티를 지금 그려진 관계선(켠 종류)에 따라 다시 배치 (고정한 것은 그대로)">자동 배치</button>
+    <button class="btn" id="pin" title="선택한 엔터티를 고정 -- 자동 배치가 옮기지 않는다">고정</button>
+    <button class="btn" id="undo" title="자동 배치·초기화 전 위치로">되돌리기</button>
+    <button class="btn" id="reset" title="고정을 풀고 이 단계 전체를 처음부터 배치 (두 번 눌러야 한다)">초기화</button>
+    <label title="옮긴 위치를 이 브라우저에만 둔다 (공유 위치 파일은 그대로)"><input type="checkbox" id="mine"> 내 화면에만</label></div>
+  <div class="grp"><span>내보내기</span><button class="btn" id="svg">SVG</button><button class="btn" id="png">PNG</button></div>
+</header>
+<aside>
+  <div class="find">
+    <input type="search" id="q" placeholder="찾기 -- 한글·물리 이름, 별칭, 설명, 원천 열" aria-label="찾기">
+    <div class="pick"><div class="seg" id="view" role="group" aria-label="보이는 엔터티">
+      <button data-v="all">전체</button><button data-v="sel">선택만</button><button data-v="near">이웃까지</button></div>
+      <button class="btn" id="clear" title="선택 해제 (Esc)">해제</button></div>
+    <div class="rk" id="relkinds" role="group" aria-label="관계선 종류"><span id="rk-l" title="끈 종류는 그리지 않고, 이웃 보기·자동 배치도 켠 선만 본다">관계선 종류</span><div class="row"></div></div>
+  </div>
+  <div id="list" role="list"></div>
+</aside>
+<main>
+  <svg id="c" xmlns="http://www.w3.org/2000/svg" aria-label="ERD"><g id="world"><g id="frames"></g><g id="rels"></g><g id="ents"></g></g></svg>
+  <div id="tip" role="tooltip"></div>
+  <div id="empty"><div><b id="empty-h"></b><span id="empty-t"></span></div></div>
+  <section id="detail" aria-label="상세"><header><h2 id="d-title"></h2><button class="btn" id="d-close" title="닫기">닫기</button></header><div class="body" id="d-body"></div></section>
+  <div id="status" aria-live="polite"><span class="dot"></span><span id="status-t">읽는 중</span><span id="status-rel"></span></div>
+</main>
+<script nonce="__NONCE__">
+"use strict";
+const CFG = __CONFIG__;
+const NS = "http://www.w3.org/2000/svg";
+const $ = (s) => document.querySelector(s);
+const store = {get(k, d) { try { const v = localStorage.getItem("dataviewer." + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+               set(k, v) { try { localStorage.setItem("dataviewer." + k, JSON.stringify(v)); } catch (e) {} }};
+const STAGES = ["concept", "logical", "physical"];
+const STAGE_KO = {concept: "개념 모델", logical: "논리 모델", physical: "물리 모델"};
+const MEANING = {grain: "한 행", scope: "범위", source_kind: "구분", history: "변경·이력", split_reason: "분리 이유", tech_reason: "도입 이유",
+                 unit: "단위", value_rule: "값 규칙", null_meaning: "비어 있으면", time_zone: "시간대", code_set: "코드 집합", key_kind: "식별",
+                 source: "원천", derivation: "계산·변환", protection: "보호"};
+const S = {model: null, level: store.get("level", 3), names: store.get("names", "both"), theme: store.get("theme", "paper"),
+           stage: STAGES.includes(store.get("stage", "physical")) ? store.get("stage", "physical") : "physical",
+           mine: !!CFG.save && store.get("mine", false),
+           live: CFG.live, view: "all", sel: new Set(), size: new Map(), q: "",
+           z: 1, px: 40, py: 40, pending: false, fitted: {}, hover: null, placed: new Set(), off: new Map(),
+           posBy: {concept: new Map(), logical: new Map(), physical: new Map()},
+           pins: {concept: new Set(), logical: new Set(), physical: new Set()},
+           prev: {concept: null, logical: null, physical: null}, lastLayout: null,
+           touched: {concept: new Set(), logical: new Set(), physical: new Set()}, refit: {},
+           relOff: {logical: new Set(store.get("relOff.logical", [])), physical: new Set(store.get("relOff.physical", []))}};
+Object.defineProperty(S, "pos", {get() { return S.posBy[S.stage]; }});
+const LAYOUT = {head1: 30, head2: 42, row: 18, pad: 6, minW: 150, gapX: 70, gapY: 36};
+const measure = document.createElement("canvas").getContext("2d");
+function textW(t, font) { measure.font = font; return measure.measureText(t || "").width; }
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs || {}) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function txt(parent, x, y, cls, s) { const t = el("text", {x, y, class: cls}, parent); t.textContent = s; return t; }
+function h(tag, cls, text, parent) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined && text !== null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+const gid = (src, key) => src.id + "|" + key;
+const PHYS = () => S.stage === "physical";
+
+/* ---------------------------------------------------------------- 자료 -- 단계(개념·논리·물리)마다 같은 모양으로 */
+function levelOf(s, stage) { return stage === "physical" ? null : ((s.levels || {})[stage] || null); }
+function stageNodes(s, stage) {
+  stage = stage || S.stage;
+  if (stage === "physical") return s.tables;
+  const lv = levelOf(s, stage); if (!lv) return [];
+  if (stage === "concept")      // 개념 캔버스: 업무 용어와 관계만 (속성·키·자료형·물리명 없음)
+    return lv.nodes.map(n => ({key: n.key, schema: "개념", name: n.name, kor: n.name, kind: "개념", is_pi: false, columns: [], node: n}));
+  return lv.nodes.map(n => ({key: n.key, schema: "논리", name: n.name, kor: n.name, kind: "논리", is_pi: false, node: n,
+    columns: n.attributes.map(a => ({name: a.name, kor: a.name, type: "", pk: n.identifier.includes(a.name), fk: null, unique: false, nullable: true, pi: false, description: a.definition}))}));
+}
+function stageRels(s, stage) {
+  stage = stage || S.stage;
+  if (stage === "physical") return s.relations;
+  const lv = levelOf(s, stage); if (!lv) return [];
+  return lv.relations.map(r => ({id: r.id, from: r.from, to: r.to, from_cols: [], to_cols: [], optional: !!r.optional,
+                                 one_to_one: r.cardinality === "1:1", label: r.phrase, card: r.cardinality || null, phrase: true,
+                                 rel_kind: stage === "concept" ? null : r.rel_kind}));
+}
+/* 관계선 종류 -- 원본을 읽을 때 정한다 (sources.classify_relations). 개념 모델은 나누지 않는다 */
+const REL_KINDS = [["identifying", "식별", "부모의 식별자를 물려받는다 (부모/자식)"], ["mandatory", "필수 참조", "식별자는 아니고, 반드시 가리킨다"],
+                   ["optional", "선택 참조", "식별자는 아니고, 비어 있어도 된다"], ["code", "코드 참조", "코드 테이블을 가리킨다"]];
+const REL_KO = Object.fromEntries(REL_KINDS.map(([k, ko]) => [k, ko]));
+function relKind(r) { return r.rel_kind || (r.phrase ? null : r.optional ? "optional" : "mandatory"); }
+function relShown(r) { const k = relKind(r), off = S.relOff[S.stage]; return !k || !off || !off.has(k); }
+function relFilterKey() { const off = S.relOff[S.stage]; return !off || !off.size ? "all" : REL_KINDS.map(x => x[0]).filter(k => !off.has(k)).join(",") || "none"; }
+function tables() { const out = []; for (const s of S.model ? S.model.sources : []) for (const t of stageNodes(s)) out.push({s, t, id: gid(s, t.key)}); return out; }
+function allRelations() { const out = []; for (const s of S.model ? S.model.sources : []) for (const r of stageRels(s)) out.push({s, r, a: gid(s, r.from), b: gid(s, r.to)}); return out; }
+function relations() { return allRelations().filter(({r}) => relShown(r)); }     // 켠 종류만 -- 그리기·이웃·자동 배치 모두 이것만 본다
+const RENDER_MAX = 800;           // 이보다 많으면 앞의 일부만 그리고 몇 개를 숨겼는지 알린다 (목록·찾기·선택 보기로 나머지)
+function visibleIds() {             // 모든 보기(전체·선택만·이웃까지)에 같은 표시 상한 -- 고른 것을 먼저, 나머지는 남은 자리만큼
+  const all = tables().map(x => x.id), has = new Set(all);
+  let want;
+  if (S.view === "all" || !S.sel.size) want = all;
+  else {
+    const w = new Set([...S.sel].filter(id => has.has(id)));
+    if (S.view === "near") for (const {a, b} of relations()) { if (S.sel.has(a) && has.has(b)) w.add(b); if (S.sel.has(b) && has.has(a)) w.add(a); }
+    want = [...w];
+  }
+  if (want.length <= RENDER_MAX) { S.capped = 0; return new Set(want); }
+  const v = new Set();
+  for (const id of S.sel) if (has.has(id) && v.size < RENDER_MAX) v.add(id);
+  for (const id of want) { if (v.size >= RENDER_MAX) break; v.add(id); }
+  S.capped = want.length;
+  return v;
+}
+function rowsOf(t) {
+  if (S.stage === "concept" || S.level <= 1) return [];
+  if (S.level === 2) return t.columns.filter(c => c.pk || c.fk);
+  return t.columns;
+}
+function label(t) { return !PHYS() || S.names === "phys" || !t.kor ? [PHYS() ? t.name : t.kor, null] : S.names === "kor" ? [t.kor, null] : [t.kor, t.name]; }
+function colLabel(c) { return !PHYS() ? c.name : S.names === "phys" || !c.kor ? c.name : S.names === "kor" ? c.kor : c.kor + " " + c.name; }
+function keyMark(c) { if (!PHYS()) return c.pk ? "ID" : ""; return c.pk && c.fk ? "PF" : c.pk ? "PK" : c.fk ? "FK" : c.unique ? "UQ" : ""; }
+function sizeOf(t) {
+  const [a, b] = label(t);
+  const head = b ? LAYOUT.head2 : LAYOUT.head1;
+  let w = Math.max(textW(a, "700 13px " + getFont()) , b ? textW(b, "11px " + getFont()) : 0) + 34 + (S.pins[S.stage].size ? 30 : 0);
+  const rows = rowsOf(t);
+  for (const c of rows) {
+    let cw = 34 + textW(colLabel(c), "600 12px " + getFont());
+    if (S.level >= 4 && PHYS()) cw += 18 + textW(c.type + (c.nullable ? "" : " NN"), "11px " + getMono());
+    if (c.pi) cw += 18;
+    w = Math.max(w, cw + 10);
+  }
+  const extra = S.level === 2 && t.columns.length > rows.length ? 1 : 0;
+  return {w: Math.max(LAYOUT.minW, Math.ceil(w)), h: head + (rows.length + extra ? (rows.length + extra) * LAYOUT.row + LAYOUT.pad * 2 : 0), head};
+}
+let _font = null, _mono = null;
+function getFont() { return _font || (_font = getComputedStyle(document.documentElement).getPropertyValue("--font")); }
+function getMono() { return _mono || (_mono = getComputedStyle(document.documentElement).getPropertyValue("--mono")); }
+function hasLayout() { return typeof window.ERDLayout === "object" && window.ERDLayout; }
+
+/* ---------------------------------------------------------------- 배치: 관계 중심(erdlayout.js), 예산 안에서. 저장된 위치를 먼저 쓴다 */
+function structureKey() {          // 노드·관계 지문 -- 저장한 배치가 어떤 구조에 대한 것인지
+  const parts = []; for (const {id} of tables()) parts.push(id); for (const {r, a, b} of relations()) parts.push(a + ">" + b + ":" + r.id);
+  parts.push("rels=" + relFilterKey());
+  let x = 2166136261; for (const ch of parts.sort().join("\n")) { x ^= ch.codePointAt(0); x = Math.imul(x, 16777619) >>> 0; }
+  return x.toString(16);
+}
+function layoutInput(only, freeAll) {
+  const nodes = [], edges = [], idx = new Map();
+  (S.model ? S.model.sources : []).forEach((s, i) => idx.set(s.id, i));
+  for (const {s, t, id} of tables()) {
+    if (only && !only.has(id)) continue;
+    const z = S.size.get(id) || sizeOf(t), p = S.pos.get(id);
+    const fixed = !freeAll && p && (S.pins[S.stage].has(id) || (only && only.fixed && only.fixed.has(id)));
+    nodes.push({id, w: z.w, h: z.h, group: String(idx.get(s.id)).padStart(3, "0") + "|" + t.schema,
+                peripheral: PHYS() && t.kind === "코드", pinned: fixed ? {x: p.x, y: p.y} : null});
+  }
+  const ids = new Set(nodes.map(n => n.id));
+  for (const {s, r, a, b} of relations()) if (ids.has(a) && ids.has(b)) edges.push({id: s.id + "|" + r.id, from: a, to: b});
+  // 개념·논리는 관계 문장을 선 위에 쓰므로 가로 간격을 넓힌다
+  return {nodes, edges, gapX: PHYS() ? LAYOUT.gapX : 190, gapY: PHYS() ? LAYOUT.gapY : 60, groupGap: 90, origin: {x: 40, y: 40}};
+}
+function fallbackPlace(todo) {    // erdlayout.js 를 못 읽었을 때 -- 이름순 격자 (겹치지 않게)
+  let x = 40, y = 40, colW = 0;
+  const b = S.pos.size ? bbox([...S.pos.keys()]) : null; if (b && b.x2 > -Infinity) { x = b.x2 + 120; y = b.y1; }
+  for (const {id} of todo) { const z = S.size.get(id); if (y > 1400) { y = b ? b.y1 : 40; x += colW + LAYOUT.gapX; colW = 0; }
+    S.pos.set(id, {x, y}); y += z.h + LAYOUT.gapY; colW = Math.max(colW, z.w); }
+}
+function placeMissing() {         // 위치가 없는 엔터티만 놓는다 -- 있는 것은 그대로 (고정처럼 다룬다)
+  const all = tables();
+  if (PHYS()) for (const {t, id} of all) if (!S.pos.has(id) && t.pos) S.pos.set(id, {x: t.pos.x, y: t.pos.y});
+  const todo = all.filter(x => !S.pos.has(x.id));
+  if (!todo.length) return;
+  if (!hasLayout()) { fallbackPlace(todo); return; }
+  // 먼저 가벼운 격자로 바로 그리고(메인 스레드는 선형 계산만), 관계 중심 배치는 Worker 에서 새 엔터티에만 (예산·취소 그대로)
+  const fixed = new Set(all.filter(x => S.pos.has(x.id)).map(x => x.id));
+  const only = new Set(all.map(x => x.id)); only.fixed = fixed;
+  const inp = layoutInput(only, false);
+  if (fixed.size) { const b = bbox([...fixed]); inp.origin = {x: b.x2 + 120, y: b.y1}; }     // 새 것은 기존 그림 오른쪽에서 시작
+  const q = ERDLayout.quick(inp);
+  for (const {id} of todo) { const p = q.positions[id]; if (p) S.pos.set(id, {x: Math.round(p.x), y: Math.round(p.y)}); else fallbackPlace([{id}]); }
+  const ids = new Set(todo.map(x => x.id));
+  if (inp.nodes.length <= ERDLayout.DEFAULT_BUDGET.maxNodes && inp.edges.length <= ERDLayout.DEFAULT_BUDGET.maxEdges)
+    if (!worker) { const stage = S.stage; document.body.dataset.layout = "busy"; clearTimeout(refineTimer);
+      refineTimer = setTimeout(() => { if (S.stage === stage && !worker) refine(ids, inp, stage); else document.body.dataset.layout = worker ? "busy" : "idle"; }, 0); }
+  else S.lastLayout = {mode: "simple", reason: "too_large", metrics: {ms: 0, crossings: -1}, warnings: []};
+}
+let refineTimer = 0;
+function refine(ids, inp, stage) { // 처음 놓은 엔터티를 관계 중심으로 -- 그사이 사람이 옮긴 것은 건드리지 않는다, 저장하지 않는다
+  runLayout(inp, (res) => {
+    if (!res || S.stage !== stage) return;
+    let n = 0;
+    for (const id of ids) if (!S.touched[stage].has(id) && res.positions[id]) { S.pos.set(id, {x: Math.round(res.positions[id].x), y: Math.round(res.positions[id].y)}); n++; }
+    if (res.mode === "simple") S.lastLayout = res;
+    if (n) { render(); if (!S.refit[stage] && !S.viewMoved) { fit(); S.refit[stage] = true; } }
+    if (!$("#status").classList.contains("bad")) status(layoutNote(res), res.mode === "simple" ? "off" : "");
+  }, true);
+}
+/* 원본끼리 겹치면 뒤 원본을 오른쪽으로 민다 -- 처음 그릴 때만. 사람이 옮겨 겹친 것은 그대로 둔다 */
+function separate(all) {
+  const done = [];
+  for (const s of S.model.sources) {
+    const ids = stageNodes(s).map(t => gid(s, t.key)).filter(id => S.pos.has(id));
+    if (!ids.length) continue;
+    const b = bbox(ids), key = S.stage + "|" + s.id;
+    if ((all || !S.placed.has(key)) && done.length) {
+      const hit = done.some(o => b.x1 < o.x2 + 120 && o.x1 < b.x2 + 120 && b.y1 < o.y2 + 80 && o.y1 < b.y2 + 80);
+      if (hit) { const dx = Math.max(...done.map(o => o.x2)) + 160 - b.x1;
+        for (const id of ids) { if (S.pins[S.stage].has(id)) continue; const p = S.pos.get(id); S.pos.set(id, {x: p.x + dx, y: p.y}); }
+        if (PHYS()) S.off.set(s.id, (S.off.get(s.id) || 0) + dx); b.x1 += dx; b.x2 += dx; }
+    }
+    S.placed.add(key); done.push(b);
+  }
+}
+function bbox(ids) {
+  let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
+  for (const id of ids) { const p = S.pos.get(id), z = S.size.get(id) || {w: LAYOUT.minW, h: 60}; if (!p) continue;
+    x1 = Math.min(x1, p.x); y1 = Math.min(y1, p.y); x2 = Math.max(x2, p.x + z.w); y2 = Math.max(y2, p.y + z.h); }
+  return {x1, y1, x2, y2};
+}
+/* 자동 배치는 Worker 에서 (화면이 멈추지 않게). 새 요청이 오면 이전 계산을 멈추고, 오래된 결과는 버린다 */
+let worker = null, jobSeq = 0, jobTimer = 0;
+function stopJob() { if (worker) { worker.terminate(); worker = null; } clearTimeout(jobTimer); document.body.dataset.layout = "idle"; }
+function quickResult(input, why) { const q = ERDLayout.quick(input); return Object.assign(q, {reason: why, metrics: {ms: 0, crossings: -1}, warnings: []}); }
+function runLayout(input, done, quiet) {
+  const id = ++jobSeq, stamp = S.stage + "|" + (S.model && S.model.version) + "|" + structureKey();
+  stopJob();
+  document.body.dataset.layout = "busy";
+  const finish = (res, err) => { if (id !== jobSeq) return; stopJob(); document.body.dataset.layout = "idle";
+    if (stamp !== S.stage + "|" + (S.model && S.model.version) + "|" + structureKey()) { if (!quiet) status("배치하는 동안 화면이 바뀌어 결과를 버렸다 -- 다시 누른다", "off"); return; }
+    done(res, err); };
+  let w = null;
+  try { w = new Worker(CFG.base + "/erdlayout.js"); } catch (e) { w = null; }
+  if (!w) { if (!hasLayout()) return finish(null, "배치 모듈을 읽지 못했다"); return finish(quickResult(input, "no_worker")); }   // 메인 스레드는 격자만
+  worker = w;
+  jobTimer = setTimeout(() => finish(null, "시간 초과"), 1600);           // 1초 예산 + 여유 -- 넘으면 멈추고 그대로 둔다
+  w.onmessage = (ev) => { const m = ev.data || {}; if (m.jobId === id) finish(m.result || null, m.error || null); };
+  w.onerror = (ev) => { ev.preventDefault && ev.preventDefault(); if (hasLayout()) finish(quickResult(input, "no_worker")); else finish(null, "배치 계산 실패"); };
+  w.postMessage({jobId: id, op: "layout", input, budget: {ms: 1000, targetMs: 250}});
+  if (!quiet) status("배치하는 중…", "off");
+}
+const REASON = {too_large: "엔터티·관계가 많아 간소 배치 -- 선택·이웃 보기에서 자동 배치하면 자세히 놓는다", time_budget: "계산 시간 예산(1초)을 넘어 간소 배치",
+                work_budget: "계산량 예산을 넘어 간소 배치", no_worker: "이 브라우저에서 배치 계산을 따로 돌릴 수 없어 격자로 놓았다"};
+function layoutNote(res) {
+  if (!res) return "";
+  const m = res.metrics || {};
+  const cr = m.crossings >= 0 ? ` · 선 교차 ${m.crossings} (이름순 배치 ${m.baselineCrossings})` : "";
+  return (res.mode === "simple" ? "간소 배치: " + (REASON[res.reason] || res.reason) : "자동 배치") + cr + ` · ${m.ms}ms` +
+         (res.warnings || []).filter(w => w.kind === "pin_conflict").map(w => " · 고정끼리 겹침: " + w.ids.map(nameOf).join(", ")).join("");
+}
+function nameOf(id) { const x = tables().find(o => o.id === id); return x ? (x.t.kor || x.t.name) : id; }
+function autoLayout(only, freeAll) {
+  const input = layoutInput(only, freeAll);
+  if (!input.nodes.length) return;
+  if (only && only.size < tables().length) { const b = bbox([...only]); if (b.x2 > -Infinity) input.origin = {x: b.x1, y: b.y1}; }
+  const before = new Map([...S.pos].map(([k, v]) => [k, {...v}]));
+  runLayout(input, (res, err) => {
+    if (!res) { status(`자동 배치를 못 했다 (${err}) -- 지금 위치를 그대로 둔다`, "bad"); return; }
+    S.prev[S.stage] = before;
+    for (const id of Object.keys(res.positions)) S.touched[S.stage].add(id);
+    for (const [id, p] of Object.entries(res.positions)) S.pos.set(id, {x: Math.round(p.x), y: Math.round(p.y)});
+    S.lastLayout = res; S.lastLayoutAt = Date.now();
+    saveLayout(new Set(input.nodes.map(n => n.id.split("|")[0])), {previous: before, algo: {version: res.algo, structure: structureKey(), mode: res.mode, rels: relFilterKey()}});
+    fit(); syncButtons(); status(layoutNote(res), res.mode === "simple" ? "off" : "");
+  });
+}
+
+/* ---------------------------------------------------------------- 그리기 */
+function render() {
+  if (!S.model) return;
+  if (S.hover && S.hover.rel) S.hover = null;      // 다시 그리면 가리키던 선은 사라진다
+  const all = tables();
+  for (const {t, id} of all) S.size.set(id, sizeOf(t));
+  placeMissing(); separate(false);
+  const vis = visibleIds();
+  const ents = $("#ents"), rels = $("#rels"), frames = $("#frames");
+  ents.textContent = ""; rels.textContent = ""; frames.textContent = "";
+  const q = S.q.trim().toLowerCase();
+  const groups = new Map();
+  for (const {s, t, id} of all) if (vis.has(id)) { const g = s.id + "|" + t.schema; if (!groups.has(g)) groups.set(g, {s, schema: t.schema, ids: []}); groups.get(g).ids.push(id); }
+  const multi = S.model.sources.length > 1;
+  for (const g of groups.values()) {
+    const b = bbox(g.ids), f = el("g", {class: "frame"}, frames);
+    el("rect", {x: b.x1 - 22, y: b.y1 - 40, width: b.x2 - b.x1 + 44, height: b.y2 - b.y1 + 62, rx: 8}, f);
+    const t = txt(f, b.x1 - 10, b.y1 - 20, "", g.schema);
+    if (multi) { const sp = el("tspan", {class: "s", dx: 8}, t); sp.textContent = g.s.name; }
+  }
+  const rowY = new Map();
+  for (const {t, id} of all) {
+    if (!vis.has(id)) continue;
+    const p = S.pos.get(id), z = S.size.get(id), [a, b] = label(t);
+    const hit = q && hay(t).includes(q);
+    const g = el("g", {class: "ent k-" + t.kind + (S.sel.has(id) ? " sel" : "") + (hit ? " match" : ""), transform: `translate(${p.x},${p.y})`, "data-id": id, tabindex: 0, role: "button",
+                       "aria-label": PHYS() ? (t.kor ? t.kor + " " : "") + t.name : t.name}, ents);
+    el("rect", {class: "plate", width: z.w, height: z.h, rx: 4}, g);
+    el("rect", {class: "head", x: 0.5, y: 0.5, width: z.w - 1, height: z.head - 1, rx: 3.5}, g);
+    el("rect", {class: "tab", x: 0, y: 0, width: 5, height: z.h, rx: 2}, g);
+    txt(g, 14, b ? 18 : 19, "nm", a);
+    if (b) txt(g, 14, 33, "ph", b);
+    if (S.pins[S.stage].has(id)) txt(g, z.w - 10, b ? 33 : 19, "pin", "고정").setAttribute("text-anchor", "end");
+    if (t.is_pi) txt(g, z.w - 10, 18, "cpi", "개인정보").setAttribute("text-anchor", "end");
+    const rows = rowsOf(t), ys = {};
+    if (rows.length || (S.level === 2 && t.columns.length && S.stage !== "concept")) el("line", {class: "sep", x1: 5, x2: z.w, y1: z.head, y2: z.head}, g);
+    rows.forEach((c, i) => {
+      const y = z.head + LAYOUT.pad + i * LAYOUT.row + 13;
+      ys[c.name] = z.head + LAYOUT.pad + i * LAYOUT.row + LAYOUT.row / 2;
+      const k = keyMark(c); if (k) txt(g, 12, y, "ck", k);
+      txt(g, 34, y, "cn" + (c.nullable ? "" : " nn"), colLabel(c));
+      if (c.pi) { const pi = txt(g, 34 + textW(colLabel(c), (c.nullable ? "" : "600 ") + "12px " + getFont()) + 6, y, "cpi", "PI"); pi.setAttribute("aria-label", "개인정보"); }
+      if (S.level >= 4 && PHYS()) { const ty = txt(g, z.w - 10, y, "ct", c.type + (c.nullable ? "" : " NN")); ty.setAttribute("text-anchor", "end"); }
+    });
+    if (S.level === 2 && t.columns.length > rows.length && S.stage !== "concept") txt(g, 34, z.head + LAYOUT.pad + rows.length * LAYOUT.row + 13, "more", `그 밖의 ${PHYS() ? "컬럼" : "속성"} ${t.columns.length - rows.length}개`);
+    rowY.set(id, ys);
+  }
+  drawAllRels(rels, vis, rowY, true);
+  focus();
+  emptyState(all.length);
+  const hadNote = S.capNote;
+  S.capNote = "";
+  if (S.capped) {                   // 숨긴 엔터티·관계를 없는 것처럼 두지 않는다 -- 그릴 때마다 실제 수로
+    const hidden = relations().filter(({a, b}) => !vis.has(a) || !vis.has(b)).length;
+    S.capNote = `${S.view === "near" ? "이웃까지 " : S.view === "sel" ? "고른 " : ""}엔터티 ${S.capped}개 중 ${vis.size}개만 그렸다 · ` +
+      `숨긴 엔터티와 이어진 관계 ${hidden}개는 그리지 않았다 -- ` +
+      (S.view === "near" ? "이웃이 많다: 목록·찾기에서 이웃을 골라 '선택만'으로 나눠 본다" : "왼쪽 목록·찾기에서 골라 '선택만'·'이웃까지'로 본다");
+    if (!$("#status").classList.contains("bad")) status(S.capNote, "off");
+  } else if (hadNote && !$("#status").classList.contains("bad")) status(`엔터티 ${vis.size}개를 모두 그렸다`);   // 상한이 풀리면 안내도 바꾼다
+  if (!S.fitted[S.stage] && all.length) { fit(); S.fitted[S.stage] = true; S.viewMoved = false; }
+  applyView();
+  stageInfo();
+  syncRelKinds();
+  document.body.dataset.version = String(S.model.version);     // 어느 판까지 그렸는지 (시험·도구가 다시 그리기가 끝났는지 본다)
+  document.body.dataset.rendered = String((+document.body.dataset.rendered || 0) + 1);
+}
+function emptyState(n) {
+  const e = $("#empty");
+  if (n) { e.style.display = "none"; return; }
+  e.style.display = "grid";
+  if (!PHYS() && S.model && S.model.sources.length) {
+    const kinds = new Set(S.model.sources.map(s => s.kind));
+    $("#empty-h").textContent = `${STAGE_KO[S.stage]} 미작성`;
+    $("#empty-t").textContent = (kinds.has("model") ? `정본(model.json)에 ${S.stage === "concept" ? "concept_model" : "logical_model"} 이 아직 없다. ` :
+      "이 원본(정의서·.dbm·실제 DB)에는 개념·논리 모델이 없다 -- 정본(model.json)을 연다. ") +
+      "물리 모델로 대신 보여 주지 않는다. 기존 모델이면 concept_model.py draft 로 역매핑 초안을 만들고 업무 용어를 확인받는다.";
+  } else if (S.model) { const bad = S.model.sources.filter(s => s.error);
+    $("#empty-h").textContent = bad.length ? "원본을 읽지 못했다" : "그릴 엔터티가 없다";
+    $("#empty-t").textContent = bad.length ? "왼쪽 목록의 이유를 보고 원본을 고치면 다시 읽는다." : "원본 파일에 테이블이 있어야 그린다."; }
+}
+function stageInfo() {
+  const box = $("#stage-info"); box.textContent = "";
+  if (!S.model) return;
+  if (PHYS()) { box.textContent = `${STAGE_KO.physical} · 원본 ${S.model.sources.length}개`; return; }
+  const parts = S.model.sources.map(s => { const lv = levelOf(s, S.stage); return lv ? `${lv.label}${lv.version ? " · 버전 " + lv.version : ""}${lv.confirmed_by ? " · " + lv.confirmed_by : ""}` : "미작성"; });
+  const b = h("b", "", STAGE_KO[S.stage], box); void b;
+  box.appendChild(document.createTextNode(" · " + parts.join(" / ")));
+  const sc = S.model.sources.map(s => (levelOf(s, S.stage) || {}).scope).filter(Boolean);
+  box.title = sc.length ? "범위: " + sc.join(" / ") : "";
+}
+/* 관계선 종류 켜고 끄기 -- 단계마다 따로 기억한다 (이 브라우저). 끈 종류는 그리지 않고 상태 줄에 몇 개 숨겼는지 */
+function syncRelKinds() {
+  const row = $("#relkinds .row");
+  if (!row.children.length) for (const [k, ko, why] of REL_KINDS) {
+    const b = h("button", k === "code" ? "code nid" : k === "identifying" ? "" : "nid", null, row);
+    b.type = "button"; b.dataset.k = k; b.title = why;
+    const sv = el("svg", {viewBox: "0 0 26 8", "aria-hidden": "true"}, b); el("path", {d: "M1 4 H25"}, sv);
+    h("span", "", ko, b); h("em", "", "", b);
+  }
+  const counts = {}, all = allRelations();
+  for (const {r} of all) { const k = relKind(r); if (k) counts[k] = (counts[k] || 0) + 1; }
+  const off = S.relOff[S.stage], none = S.stage === "concept";
+  for (const b of row.children) {
+    const k = b.dataset.k;
+    b.disabled = none || !counts[k];
+    b.setAttribute("aria-pressed", String(none || !off.has(k)));
+    b.lastChild.textContent = none ? "" : String(counts[k] || 0);
+  }
+  $("#rk-l").textContent = none ? "관계선 종류 -- 개념 모델은 나누지 않는다" : "관계선 종류";
+  const hidden = none ? 0 : all.length - relations().length;
+  $("#status-rel").textContent = hidden ? `숨긴 관계 ${hidden}개 (${REL_KINDS.filter(([k]) => off.has(k) && counts[k]).map(([, ko]) => ko).join("·")} 끔)` : "";
+}
+$("#relkinds").addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b || b.disabled || S.stage === "concept") return;
+  const off = S.relOff[S.stage], k = b.dataset.k;
+  if (off.has(k)) off.delete(k); else off.add(k);
+  store.set("relOff." + S.stage, [...off]);
+  S.hover = null; render();
+});
+/* 관계선: erdlayout.routes 로 박스를 피하는 경로를 고른다 (끌기 중에는 빠른 길로) */
+function drawAllRels(layer, vis, rowY, routed) {
+  lane = 0;
+  const list = relations().filter(({a, b}) => vis.has(a) && vis.has(b));
+  let paths = null;
+  if (routed && hasLayout() && list.length && list.length <= 600) {
+    const nodes = [...vis].filter(id => S.pos.has(id)).map(id => ({id, ...S.pos.get(id), w: S.size.get(id).w, h: S.size.get(id).h}));
+    const edges = list.map(({s, r, a, b}) => ({id: s.id + "|" + r.id, from: a, to: b,
+      ya: rowAt(a, r.from_cols, rowY), yb: rowAt(b, r.to_cols, rowY)}));
+    try { paths = ERDLayout.routes({nodes, edges}, {ms: 80, maxRouteChecks: 60000}).paths; } catch (e) { paths = null; }
+  }
+  for (const it of list) drawRel(layer, it.s, it.r, it.a, it.b, rowY, paths && paths[it.s.id + "|" + it.r.id]);
+}
+function rowAt(id, cols, rowY) { const p = S.pos.get(id), z = S.size.get(id), ys = rowY.get(id) || {}; const c = (cols || []).find(c => ys[c] !== undefined); return c !== undefined ? p.y + ys[c] : p.y + z.head / 2; }
+function anchors(a, b) {
+  const pa = S.pos.get(a), za = S.size.get(a), pb = S.pos.get(b), zb = S.size.get(b);
+  if (a === b) return {self: true, x: pa.x + za.w, y: pa.y + za.head / 2};
+  const overlapX = pa.x < pb.x + zb.w + 30 && pb.x < pa.x + za.w + 30;
+  if (overlapX) { const x = Math.max(pa.x + za.w, pb.x + zb.w) + 26; return {xa: pa.x + za.w, da: 1, xb: pb.x + zb.w, db: 1, around: x}; }
+  return pa.x + za.w / 2 < pb.x + zb.w / 2 ? {xa: pa.x + za.w, da: 1, xb: pb.x, db: -1} : {xa: pa.x, da: -1, xb: pb.x + zb.w, db: 1};
+}
+let lane = 0;
+function drawRel(layer, s, r, a, b, rowY, route) {
+  const pa = S.pos.get(a), za = S.size.get(a);
+  const ya = rowAt(a, r.from_cols, rowY), yb = rowAt(b, r.to_cols, rowY);
+  const k = relKind(r);
+  const g = el("g", {class: "rel" + (k ? " k-" + k : "") + (k && k !== "identifying" ? " nid" : "") + (k === "code" ? " code" : "") + (r.optional ? " opt" : ""), "data-kind": k || "", "data-a": a, "data-b": b, "data-rid": s.id + "|" + r.id}, layer);
+  let pts, self = a === b;
+  if (route && route.points && route.points.length > 1) { pts = route.points; self = route.kind === "self"; }
+  else {
+    const A = anchors(a, b);
+    if (A.self) { const x = A.x; pts = [[x, ya], [x + 24, ya], [x + 24, pa.y - 14], [x - za.w / 2, pa.y - 14], [x - za.w / 2, pa.y]]; }
+    else if (A.around !== undefined) { const ax = A.around + (lane++ % 4) * 9; pts = [[A.xa, ya], [ax, ya], [ax, yb], [A.xb, yb]]; }
+    else { const mx = (A.xa + A.xb) / 2; pts = [[A.xa, ya], [mx, ya], [mx, yb], [A.xb, yb]]; }
+  }
+  const d = "M" + pts.map(p => p[0] + " " + p[1]).join(" L");
+  el("path", {class: "hit", d}, g);
+  el("path", {class: "line", d}, g);
+  const dir = (p, q) => Math.sign(q[0] - p[0]) || 1;
+  const ea = {x: pts[0][0], y: pts[0][1], dir: dir(pts[0], pts[1])}, n = pts.length, eb = {x: pts[n - 1][0], y: pts[n - 1][1], dir: dir(pts[n - 1], pts[n - 2])};
+  if (!self) {
+    if (r.phrase) {               // 개념·논리: 확인된 수량만 표시, 관계 문장을 선 위에
+      const c = r.card; if (c) { const m = c.split(":"); (m[0] === "N" || m[0] === "M" ? endMany : endOneAt)(g, ea, r); (m[1] === "N" || m[1] === "M" ? endMany : endOneAt)(g, eb, r); }
+      let best = 0, bi = 0;                       // 가장 긴 가로 구간 위에 (긴 문장은 줄이고 전체는 가리키면 보인다)
+      for (let i = 1; i < n; i++) { const L = pts[i][1] === pts[i - 1][1] ? Math.abs(pts[i][0] - pts[i - 1][0]) : 0; if (L > best) { best = L; bi = i; } }
+      const p0 = pts[bi ? bi - 1 : 0], p1 = pts[bi || 1] || p0, full = (r.label || "") + (c ? ` (${c})` : "");
+      const t = txt(g, (p0[0] + p1[0]) / 2, p0[1] - 5, "rl", full.length > 16 ? full.slice(0, 15) + "…" : full);
+      t.setAttribute("text-anchor", "middle"); t.setAttribute("aria-hidden", "true");
+    } else { endMany(g, ea, r); endOne(g, eb); }
+  }
+  g.addEventListener("pointerenter", (e) => { S.hover = {rel: g}; focus(); tip(e, relText(s, r)); });
+  g.addEventListener("pointermove", (e) => tip(e, relText(s, r)));
+  g.addEventListener("pointerleave", () => { S.hover = null; focus(); tip(null); });
+}
+function endOne(g, e) { for (const k of [8, 13]) el("path", {d: `M${e.x + e.dir * k} ${e.y - 6} V${e.y + 6}`}, g); }
+function endOneAt(g, e) { el("path", {d: `M${e.x + e.dir * 10} ${e.y - 6} V${e.y + 6}`}, g); }
+function endMany(g, e, r) {
+  const d = e.dir;
+  if (r.one_to_one && !r.phrase) el("path", {d: `M${e.x + d * 8} ${e.y - 6} V${e.y + 6}`}, g);
+  else el("path", {d: `M${e.x} ${e.y - 6} L${e.x + d * 12} ${e.y} L${e.x} ${e.y + 6}`}, g);
+  if (r.phrase) return;
+  if (r.optional) el("circle", {cx: e.x + d * 18, cy: e.y, r: 3.6}, g);
+  else el("path", {d: `M${e.x + d * 17} ${e.y - 6} V${e.y + 6}`}, g);
+}
+function relText(s, r) {
+  const T = (k) => stageNodes(s).find(t => t.key === k) || {name: k, kor: k};
+  const nm = (t) => !PHYS() ? t.name : S.names === "phys" || !t.kor ? t.name : t.kor;
+  const kk = relKind(r) ? REL_KO[relKind(r)] + " 관계 · " : "";
+  if (r.phrase) return `${r.label}\n${nm(T(r.from))} → ${nm(T(r.to))}\n${kk}${r.card ? "수량 " + r.card : "수량 미확정"}`;
+  return `${r.label ? r.label + "\n" : ""}${nm(T(r.from))} (${r.from_cols.join(", ")}) → ${nm(T(r.to))} (${r.to_cols.join(", ")})\n` +
+         `${kk}${r.one_to_one ? "1:1" : "여럿:1"} · ${r.optional ? "없어도 된다" : "반드시 있다"}`;
+}
+function tip(e, s) {
+  const t = $("#tip");
+  if (!e) { t.style.display = "none"; return; }
+  t.textContent = ""; s.split("\n").forEach((line, i) => { if (i) t.appendChild(document.createElement("br")); t.appendChild(document.createTextNode(line)); });
+  const r = $("main").getBoundingClientRect();
+  t.style.display = "block"; t.style.left = Math.min(e.clientX - r.left + 14, r.width - t.offsetWidth - 8) + "px"; t.style.top = (e.clientY - r.top + 14) + "px";
+}
+function focus() {
+  const svg = $("#c"), hv = S.hover;
+  const on = new Set(), onRel = new Set();
+  if (hv && hv.ent) { on.add(hv.ent); document.querySelectorAll(".rel").forEach(g => { if (g.dataset.a === hv.ent || g.dataset.b === hv.ent) { onRel.add(g); on.add(g.dataset.a); on.add(g.dataset.b); } }); }
+  if (hv && hv.rel) { onRel.add(hv.rel); on.add(hv.rel.dataset.a); on.add(hv.rel.dataset.b); }
+  svg.classList.toggle("focus", !!hv);
+  document.querySelectorAll(".ent").forEach(g => g.classList.toggle("on", on.has(g.dataset.id)));
+  document.querySelectorAll(".rel").forEach(g => { g.classList.toggle("on", onRel.has(g)); g.classList.toggle("flow", S.sel.has(g.dataset.a) || S.sel.has(g.dataset.b)); });
+}
+
+/* ---------------------------------------------------------------- 찾기 -- 한글·물리 이름, 별칭·원문, 설명, 의미(원천 열·단위) */
+function hay(t) {
+  if (t._hay) return t._hay;
+  let parts;
+  if (S.stage === "concept") { const n = t.node; parts = [n.name, n.definition, ...n.aliases, ...n.terms.map(x => x.original + " " + (x.standard_term || ""))]; }
+  else if (S.stage === "logical") { const n = t.node; parts = [n.name, n.definition, ...n.attributes.map(a => a.name + " " + a.definition)]; }
+  else parts = [t.name, t.kor, t.description || "", ...Object.values(t.meaning || {}),
+                ...t.columns.map(c => [c.name, c.kor, c.description || "", ...Object.values(c.meaning || {})].join(" "))];
+  Object.defineProperty(t, "_hay", {value: parts.join(" ").toLowerCase(), enumerable: false});
+  return t._hay;
+}
+
+/* ---------------------------------------------------------------- 왼쪽 목록 */
+const KIND_COLOR = {"코드": "code", "기준": "base", "거래": "tx", "이력": "hist", "PI": "pi", "개념": "con", "논리": "log"};
+function renderList() {
+  const box = $("#list"); box.textContent = "";
+  if (!S.model) return;
+  for (const s of S.model.sources) {
+    const hd = h("div", "src", null, box);
+    const n = h("span", "", s.name, hd); n.title = s.path;
+    const nodes = stageNodes(s);
+    h("em", "", `${nodes.length}개 · ${({model: "정본", light: "light 정본", xlsx: "정의서", dbm: "pgModeler", db: "실제 DB"})[s.kind] || s.kind}`, hd);
+    for (const [cls, text] of [["msg", s.error], ["msg warn", s.warning]]) if (text) h("div", cls, text, box);
+    if (!PHYS()) {
+      const lv = levelOf(s, S.stage);
+      if (!lv) { h("div", "msg info", `${STAGE_KO[S.stage]} 미작성`, box); continue; }
+      if (lv.status === "reverse_draft") h("div", "msg warn", "역매핑 초안 -- 업무 개념 승인이 아니다", box);
+      else if (lv.status !== "confirmed") h("div", "msg info", lv.label + " -- 아직 사용자 확인 전", box);
+    }
+    const bySchema = new Map();
+    for (const t of nodes) { if (!bySchema.has(t.schema)) bySchema.set(t.schema, []); bySchema.get(t.schema).push(t); }
+    for (const [sch, list] of [...bySchema].sort((a, b) => a[0].localeCompare(b[0]))) {
+      if (PHYS()) h("div", "sch", sch, box);
+      for (const t of list.sort((a, b) => (PHYS() ? a.name.localeCompare(b.name) : a.name.localeCompare(b.name, "ko")))) {
+        const id = gid(s, t.key), b = h("button", "item", null, box);
+        b.dataset.id = id; b.setAttribute("role", "listitem"); b.setAttribute("aria-pressed", S.sel.has(id));
+        b.dataset.hay = hay(t);
+        const i = h("i", "", null, b); i.style.background = `var(--k-${KIND_COLOR[t.kind] || "base"})`;
+        h("b", "", PHYS() ? (S.names === "phys" || !t.kor ? t.name : t.kor) : t.name, b);
+        h("small", "", PHYS() ? (S.names === "phys" || !t.kor ? `${t.columns.length}` : t.name) : (S.stage === "concept" ? t.node.kind : `${t.columns.length}`), b);
+        b.addEventListener("click", () => { toggleSel(id, true); centerOn(id); showDetail(id); });
+      }
+    }
+  }
+  filterList();
+}
+function filterList() {
+  const q = S.q.trim().toLowerCase();
+  document.querySelectorAll("#list .item").forEach(b => b.classList.toggle("hide", !!q && !b.dataset.hay.includes(q)));
+}
+function toggleSel(id, add) {
+  if (!add) { const had = S.sel.has(id) && S.sel.size === 1; S.sel.clear(); if (!had) S.sel.add(id); }
+  else if (S.sel.has(id)) S.sel.delete(id); else S.sel.add(id);
+  syncSel();
+}
+function syncSel() {
+  document.querySelectorAll("#list .item").forEach(b => b.setAttribute("aria-pressed", S.sel.has(b.dataset.id)));
+  if (!S.sel.size && S.view !== "all") S.view = "all";
+  syncButtons();
+  const undrawn = S.capped && [...S.sel].some(id => !document.querySelector(`.ent[data-id="${CSS.escape(id)}"]`));
+  if (S.view !== "all" || undrawn) render(); else { document.querySelectorAll(".ent").forEach(g => g.classList.toggle("sel", S.sel.has(g.dataset.id))); focus(); }
+  if (S.sel.size === 1) showDetail([...S.sel][0]); else if (!S.sel.size) hideDetail();
+}
+
+/* ---------------------------------------------------------------- 상세 패널 -- 설명·의미, 개념 ↔ 논리 ↔ 물리 이동 */
+function find(stage, key, srcId) {
+  for (const s of S.model.sources) { if (srcId && s.id !== srcId) continue; const t = stageNodes(s, stage).find(x => x.key === key); if (t) return {s, t}; }
+  return null;
+}
+function goTo(stage, key, srcId) {
+  const f = find(stage, key, srcId);
+  if (!f) { status(`${STAGE_KO[stage]}에 ${key} 가 없다 (미작성·미확정)`, "off"); return; }
+  setStage(stage, false);
+  const id = gid(f.s, key); S.sel.clear(); S.sel.add(id); S.view = "all";
+  renderList(); render(); syncSel(); centerOn(id);
+}
+function goBtn(parent, stage, key, text, srcId) {
+  const b = h("button", "go", text, parent); b.title = `${STAGE_KO[stage]}에서 보기`;
+  b.addEventListener("click", () => goTo(stage, key, srcId)); return b;
+}
+function dl(parent, rows) { const d = h("dl", "", null, parent); for (const [k, v] of rows) if (v !== undefined && v !== null && v !== "") { h("dt", "", k, d); h("dd", "", v, d); } return d; }
+function hideDetail() { $("#detail").classList.remove("on"); }
+function showDetail(id) {
+  const x = tables().find(o => o.id === id); if (!x) { hideDetail(); return; }
+  const {s, t} = x, body = $("#d-body"), title = $("#d-title");
+  body.textContent = ""; title.textContent = "";
+  const lvLabel = (st) => { const lv = levelOf(s, st); return lv ? lv.label : "미작성"; };
+  if (S.stage === "concept") {
+    const n = t.node;
+    title.append(n.name); h("small", "", `개념 · ${n.kind || "종류 없음"} · ${lvLabel("concept")}`, title);
+    h("p", "", n.definition || "정의 없음", body);
+    if (n.aliases.length) dl(body, [["별칭", n.aliases.join(", ")]]);
+    if (n.origin === "ai" && n.status !== "confirmed") h("p", "none", "AI 가 추가한 개념 -- 사용자 확인 전", body);
+    if (n.terms.length) { h("h3", "", "용어 정리 (원문 → 개념)", body);
+      for (const tm of n.terms) { const d = h("div", "term", null, body); h("div", "", `“${tm.original}” · ${tm.source || "출처 없음"}`, d);
+        h("div", "none", `${tm.reason || ""}${tm.status ? " · " + tm.status : ""}${tm.standard_term ? " · 표준 용어 " + tm.standard_term : ""}`, d); } }
+    h("h3", "", "논리 모델", body);
+    const p = h("div", "", null, body);
+    if (!levelOf(s, "logical")) h("span", "none", "논리 모델 미작성", p);
+    else if (!n.maps.length) h("span", "none", "대응 논리 엔터티 미확정", p);
+    for (const lid of n.maps) { const f = find("logical", lid, s.id); goBtn(p, "logical", lid, f ? f.t.name : lid, s.id); }
+  } else if (S.stage === "logical") {
+    const n = t.node;
+    title.append(n.name); h("small", "", `논리 엔터티 · ${lvLabel("logical")}`, title);
+    h("p", "", n.definition || "정의 없음", body);
+    dl(body, [["식별자", n.identifier.join(", ")], ["대응 이유", n.reason]]);
+    h("h3", "", "속성", body);
+    for (const a of n.attributes) { const c = h("div", "col", null, body); h("b", "", a.name + (n.identifier.includes(a.name) ? " (식별)" : ""), c); if (a.definition) h("div", "", a.definition, c); }
+    h("h3", "", "개념 ← / 물리 →", body);
+    const p = h("div", "", null, body);
+    if (!levelOf(s, "concept")) h("span", "none", "개념 모델 미작성 ", p);
+    for (const cid of n.concepts) { const f = find("concept", cid, s.id); goBtn(p, "concept", cid, "개념 " + (f ? f.t.name : cid), s.id); }
+    if (!n.tables.length) h("span", "none", "대응 테이블 없음 (미구현)", p);
+    for (const tk of n.tables) goBtn(p, "physical", tk, "테이블 " + tk.split(".").pop(), s.id);
+  } else {
+    title.append(t.kor || t.name); h("small", "", `${t.schema}.${t.name} · ${t.kind}${t.is_pi ? " · 개인정보" : ""}`, title);
+    h("p", "", t.description || t.comment || "설명 없음", body);
+    dl(body, Object.entries(t.meaning || {}).map(([k, v]) => [MEANING[k] || k, v]));
+    if (s.levels && (s.levels.logical || s.levels.concept)) {
+      h("h3", "", "논리 모델 ←", body);
+      const p = h("div", "", null, body);
+      if (!(t.logical || []).length) h("span", "none", t.tech_reason ? "기술 객체: " + t.tech_reason : "대응 논리 엔터티 미확정", p);
+      for (const lid of t.logical || []) { const f = find("logical", lid, s.id); goBtn(p, "logical", lid, f ? f.t.name : lid, s.id); }
+    }
+    h("h3", "", `컬럼 ${t.columns.length}개`, body);
+    for (const c of t.columns) {
+      const d = h("div", "col", null, body);
+      h("b", "", c.kor || c.name, d); d.append(" "); h("code", "", `${c.name} ${c.type}${c.nullable ? "" : " NN"}${c.pk ? " PK" : ""}${c.fk ? " → " + c.fk : ""}`, d);
+      if (c.description) h("div", "", c.description, d);
+      const m = Object.entries(c.meaning || {}); if (m.length) dl(d, m.map(([k, v]) => [MEANING[k] || k, v]));
+    }
+  }
+  $("#detail").classList.add("on");
+}
+$("#d-close").addEventListener("click", hideDetail);
+
+/* ---------------------------------------------------------------- 화면 이동 */
+function applyView() { $("#world").setAttribute("transform", `translate(${S.px},${S.py}) scale(${S.z})`); }
+function canvasW() {               // 상세 패널이 열려 있으면 그만큼 뺀 너비에 맞춘다
+  const r = $("#c").getBoundingClientRect(), d = $("#detail");
+  return d.classList.contains("on") && r.width > 700 ? r.width - d.offsetWidth - 20 : r.width;
+}
+function fit(ids) {
+  ids = ids || [...visibleIds()];
+  if (!ids.length) return;
+  const b = bbox(ids), r = $("#c").getBoundingClientRect(), m = 60, W = canvasW();
+  S.z = Math.max(0.15, Math.min(1.4, Math.min((W - m * 2) / (b.x2 - b.x1 || 1), (r.height - m * 2) / (b.y2 - b.y1 + 40 || 1))));
+  S.px = (W - (b.x2 - b.x1) * S.z) / 2 - b.x1 * S.z; S.py = (r.height - (b.y2 - b.y1) * S.z) / 2 - b.y1 * S.z + 10;
+  applyView();
+}
+function centerOn(id) {
+  const p = S.pos.get(id), z = S.size.get(id), r = $("#c").getBoundingClientRect();
+  if (!p || !visibleIds().has(id)) return;
+  S.px = canvasW() / 2 - (p.x + z.w / 2) * S.z; S.py = r.height / 2 - (p.y + z.h / 2) * S.z; applyView();
+}
+function toWorld(e) { const r = $("#c").getBoundingClientRect(); return {x: (e.clientX - r.left - S.px) / S.z, y: (e.clientY - r.top - S.py) / S.z}; }
+let drag = null;
+$("#c").addEventListener("pointerdown", (e) => {
+  if (e.button !== 0) return;
+  const g = e.target.closest(".ent");
+  const w = toWorld(e);
+  if (g) {
+    const id = g.dataset.id;
+    if (e.shiftKey || e.metaKey || e.ctrlKey) { toggleSel(id, true); }
+    const ids = S.sel.has(id) ? [...S.sel].filter(x => visibleIds().has(x)) : [id];
+    drag = {kind: "ent", id, ids, start: w, orig: ids.map(x => ({x, p: {...S.pos.get(x)}})), moved: false, mod: e.shiftKey || e.metaKey || e.ctrlKey};
+  } else drag = {kind: "pan", sx: e.clientX, sy: e.clientY, px: S.px, py: S.py, moved: false};
+  $("#c").setPointerCapture(e.pointerId);
+  if (drag.kind === "pan") $("#c").classList.add("panning");
+});
+$("#c").addEventListener("pointermove", (e) => {
+  if (!drag) { const g = e.target.closest(".ent"); const id = g ? g.dataset.id : null; const cur = S.hover && S.hover.ent;
+    const onRel = S.hover && S.hover.rel && S.hover.rel.isConnected;
+    if (!onRel && id !== cur) { S.hover = id ? {ent: id} : null; focus(); } return; }
+  if (drag.kind === "pan") { const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy; if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true; S.px = drag.px + dx; S.py = drag.py + dy; S.viewMoved = true; applyView(); return; }
+  const w = toWorld(e), dx = w.x - drag.start.x, dy = w.y - drag.start.y;
+  if (!drag.moved && Math.abs(dx) + Math.abs(dy) < 3 / S.z) return;
+  drag.moved = true;
+  for (const o of drag.orig) S.pos.set(o.x, {x: Math.round(o.p.x + dx), y: Math.round(o.p.y + dy)});
+  for (const o of drag.orig) { const g = document.querySelector(`.ent[data-id="${CSS.escape(o.x)}"]`); const p = S.pos.get(o.x); if (g) g.setAttribute("transform", `translate(${p.x},${p.y})`); }
+  redrawRels();
+});
+$("#c").addEventListener("pointerup", () => {
+  if (!drag) return;
+  const d = drag; drag = null; $("#c").classList.remove("panning");
+  if (d.kind === "ent") { if (d.moved) for (const id of d.ids) S.touched[S.stage].add(id);
+    if (d.moved) saveLayout(new Set(d.ids.map(id => id.split("|")[0]))); else if (!d.mod) toggleSel(d.id, false); }
+  else if (!d.moved && S.sel.size && S.view === "all") { S.sel.clear(); syncSel(); }
+});
+$("#c").addEventListener("dblclick", (e) => { const g = e.target.closest(".ent"); if (g) { S.sel.clear(); S.sel.add(g.dataset.id); S.view = "near"; syncSel(); fit(); } });
+$("#c").addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const r = $("#c").getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+  const z = Math.max(0.1, Math.min(3, S.z * Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0018))));
+  S.px = mx - (mx - S.px) * z / S.z; S.py = my - (my - S.py) * z / S.z; S.z = z; S.viewMoved = true; applyView();     // 확대·이동은 배치를 다시 계산하지 않는다
+}, {passive: false});
+$("#c").addEventListener("keydown", (e) => { const g = e.target.closest && e.target.closest(".ent"); if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); toggleSel(g.dataset.id, e.shiftKey); } });
+let relTimer = 0;
+function redrawRels() { if (relTimer) return; relTimer = requestAnimationFrame(() => { relTimer = 0;
+  const layer = $("#rels"), vis = visibleIds(), rowY = new Map();
+  for (const {t, id} of tables()) { const ys = {}; const z = S.size.get(id); rowsOf(t).forEach((c, i) => ys[c.name] = z.head + LAYOUT.pad + i * LAYOUT.row + LAYOUT.row / 2); rowY.set(id, ys); }
+  if (S.hover && S.hover.rel) S.hover = null;
+  layer.textContent = ""; drawAllRels(layer, vis, rowY, false);      // 끄는 동안은 빠른 길 -- 놓으면 다시 고른다
+  $("#frames").textContent = "";
+  focus(); }); }
+
+/* ---------------------------------------------------------------- 서버 · 위치 저장 (공유 위치 파일 / 내 화면에만 / 이 화면에서만) */
+function api(path, opts) { return fetch(CFG.base + path, Object.assign({cache: "no-store", headers: {"X-Viewer-Token": CFG.token, "Content-Type": "application/json"}}, opts || {})); }
+const mineKey = (sid, stage) => `mine.${sid}.${stage}`;
+let saveTimer = 0;
+const pending = new Map();         // "단계|원본" -> 보낼 내용 (부를 때 만든다 -- 그사이 탭을 바꿔도 다른 단계 값이 섞이지 않게)
+const echo = new Map();            // 저장한 값 여러 개를 기억한다 -- 늦게 돌아온 앞선 저장(예: 자동 배치)이 그 뒤의 되돌리기를 덮지 않게
+const ECHO_KEEP = 4;
+function echoAdd(k, j) { const a = echo.get(k) || []; if (a[a.length - 1] !== j) a.push(j); if (a.length > ECHO_KEEP) a.shift(); echo.set(k, a); }
+function echoHas(k, j) { const a = echo.get(k); return !!a && a.includes(j); }            // "단계|엔터티" -> 이 화면이 저장한 위치 -- 다시 읽을 때 돌아온 자기 저장이 그 뒤 옮긴 위치를 덮지 않게
+const lastSrv = {concept: new Map(), logical: new Map()};   // 서버에서 마지막으로 받은 개념·논리 위치 (다른 사람이 바꾼 것만 따른다)
+const pj = (p) => JSON.stringify({x: Math.round(p.x * 10) / 10, y: Math.round(p.y * 10) / 10});
+function keysOf(s, stage) { const out = {}; for (const t of stageNodes(s, stage)) { const p = S.posBy[stage].get(gid(s, t.key)); if (p) out[t.key] = p; } return out; }
+function pinsOf(s, stage) { return stageNodes(s, stage).map(t => t.key).filter(k => S.pins[stage].has(gid(s, k))); }
+function saveLayout(srcIds, extra) {
+  const stage = S.stage;
+  render();
+  if (!CFG.save) { status("위치는 이 화면에서만 바뀐다 (이 서버는 저장하지 않는다)", "off"); return; }
+  const srcs = [...srcIds].map(sid => S.model.sources.find(x => x.id === sid)).filter(Boolean);
+  if (S.mine) { for (const s of srcs) store.set(mineKey(s.id, stage), {positions: keysOf(s, stage), pinned: pinsOf(s, stage)});
+    status("위치를 이 브라우저에만 저장했다 (공유 위치 파일은 그대로)"); return; }
+  for (const s of srcs) {
+    const key = stage + "|" + s.id, before = pending.get(key) || {};
+    const body = {source: s.id, stage, positions: keysOf(s, stage), pinned: pinsOf(s, stage)};
+    if (extra && extra.previous) { body.previous = {}; for (const t of stageNodes(s, stage)) { const p = extra.previous.get(gid(s, t.key)); if (p) body.previous[t.key] = p; } }
+    else if (before.previous) body.previous = before.previous;
+    if (extra && extra.algo) body.algo = extra.algo; else if (before.algo) body.algo = before.algo;
+    for (const [k, p] of Object.entries(body.positions)) echoAdd(stage + "|" + gid(s, k), pj(p));
+    pending.set(key, body);
+  }
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flushSaves, 350);
+}
+async function flushSaves() {
+  clearTimeout(saveTimer);
+  const todo = [...pending.values()]; pending.clear();
+  for (const body of todo) {
+    try { const r = await api("/api/layout", {method: "POST", body: JSON.stringify(body)}); const j = await r.json();
+      status(r.ok ? `위치를 ${j.file} 에 저장했다 (${STAGE_KO[body.stage]})` : `위치를 저장하지 못했다: ${j.error || j.detail || r.status}`, r.ok ? "" : "bad"); }
+    catch (e) { status("위치를 저장하지 못했다: 서버에 닿지 않는다", "bad"); }
+  }
+}
+function applySaved(m, fresh) {   // 서버의 단계별 위치·고정 + (내 화면에만이면) 이 브라우저의 위치
+  for (const s of m.sources) {
+    const lay = s.layout || {};
+    for (const st of STAGES) {
+      const L = lay[st] || {positions: {}, pinned: []}, mine = S.mine ? store.get(mineKey(s.id, st), null) : null;
+      if (st !== "physical") for (const [k, p] of Object.entries(L.positions || {})) {
+        const id = gid(s, k), j = pj(p);
+        if (fresh || !S.posBy[st].has(id) || (lastSrv[st].get(id) !== j && !echoHas(st + "|" + id, j))) S.posBy[st].set(id, {x: p.x, y: p.y});
+        lastSrv[st].set(id, j);
+      }
+      if (mine) for (const [k, p] of Object.entries(mine.positions || {})) S.posBy[st].set(gid(s, k), {x: p.x, y: p.y});
+      if (!pending.has(st + "|" + s.id)) {          // 고정은 서버(또는 내 브라우저)의 것으로 바꾼다 -- 다른 사람이 푼 고정도 따른다
+        for (const id of [...S.pins[st]]) if (id.startsWith(s.id + "|")) S.pins[st].delete(id);
+        for (const k of (mine ? mine.pinned : L.pinned) || []) S.pins[st].add(gid(s, k));
+      }
+      if (fresh && L.previous && Object.keys(L.previous).length) { const mp = new Map(); for (const [k, p] of Object.entries(L.previous)) mp.set(gid(s, k), p); S.prev[st] = mp; }
+    }
+  }
+}
+function resetLocal() {           // '내 화면에만'을 바꿀 때: 화면에 남은 위치·고정을 버리고 새로 읽는다 (내 위치가 공유 파일로 새지 않게)
+  for (const st of STAGES) { S.posBy[st] = new Map(); S.pins[st] = new Set(); S.prev[st] = null; S.touched[st] = new Set(); }
+  S.refit = {};
+  for (const st of ["concept", "logical"]) lastSrv[st].clear();
+  S.placed = new Set(); S.off = new Map(); S.fitted = {}; echo.clear(); S.model = null;
+}
+async function load(force) {
+  try {
+    if (force) await api("/api/reload", {method: "POST", body: "{}"});
+    const r = await api("/api/model"); if (!r.ok) throw new Error(r.status);
+    const m = await r.json();
+    const fresh = !S.model;
+    // 원본에서 위치가 바뀐 엔터티(.dbm 을 pgModeler 에서 옮김 · 위치 파일 수정)는 새 위치를 따른다
+    if (S.model) for (const s of m.sources) { const old = S.model.sources.find(x => x.id === s.id); if (!old) continue;
+      const dx = s.layout_saved ? 0 : (S.off.get(s.id) || 0);
+      for (const t of s.tables) { const o = old.tables.find(x => x.key === t.key), id = gid(s, t.key);
+        if (o && JSON.stringify(o.pos) !== JSON.stringify(t.pos) && t.pos && !echoHas("physical|" + id, pj(t.pos)))
+          S.posBy.physical.set(id, {x: t.pos.x + dx, y: t.pos.y}); } }
+    applySaved(m, fresh);
+    S.model = m; S.pending = false;
+    for (const st of STAGES) { const ids = new Set(); for (const s of m.sources) for (const t of stageNodes(s, st)) ids.add(gid(s, t.key)); for (const id of [...S.pins[st]]) if (!ids.has(id)) S.pins[st].delete(id); }
+    const ids = new Set(tables().map(x => x.id)); for (const id of [...S.sel]) if (!ids.has(id)) S.sel.delete(id);
+    const projects = [...new Set(m.sources.map(s => s.project))];
+    $("#sub").textContent = projects.join(", "); document.title = (projects[0] ? projects.join(", ") + " " : "") + "ERD";
+    renderList(); render(); syncButtons();
+    if (S.sel.size === 1) showDetail([...S.sel][0]);
+    const bad = m.sources.filter(s => s.error);
+    const n = m.sources.reduce((a, s) => a + s.tables.length, 0);
+    status(bad.length ? `${bad.map(s => s.name).join(", ")}: 읽지 못했다 (왼쪽 목록에 이유)` : S.capNote ? S.capNote :
+           S.lastLayout && (S.lastLayout.mode === "simple" || Date.now() - (S.lastLayoutAt || 0) < 4000) ? layoutNote(S.lastLayout) :
+           `원본 ${m.sources.length}개 · 엔터티 ${n}개${fresh ? "" : " · 다시 읽었다"}`, bad.length ? "bad" : "");
+  } catch (e) { status("서버에 닿지 않는다 -- python -m dataviewer 가 돌고 있는지 본다", "bad"); }
+}
+function status(t, cls) { const s = $("#status"); s.className = cls || (S.live ? "" : "off"); $("#status-t").textContent = t; }
+function listen() {
+  let es;
+  try { es = new EventSource(CFG.base + "/api/events"); } catch (e) { return; }
+  let seen = null;
+  es.addEventListener("hello", (e) => {
+    const v = +e.data; if (seen !== null && S.model && v !== S.model.version) onChange(); seen = v;
+    if ($("#status").classList.contains("bad") && /끊겼다/.test($("#status-t").textContent)) status("변경 알림이 다시 이어졌다"); });
+  const onChange = () => { if (S.live) load(false); else { S.pending = true; syncButtons(); status("원본이 바뀌었다 -- 적용을 누르면 다시 그린다", "off"); } };
+  es.addEventListener("change", onChange);
+  es.onerror = () => { if (es.readyState === EventSource.CLOSED) status("변경 알림이 끊겼다 -- 적용 버튼으로 다시 읽는다", "bad"); };
+}
+
+/* ---------------------------------------------------------------- 단추 */
+function seg(sel, val) { document.querySelectorAll(sel + " button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === String(val))); }
+function syncButtons() {
+  seg("#level", S.level); seg("#names", S.names); seg("#view", S.view);
+  // 개념·논리 모델을 담을 수 있는 원본(정본 model.json)이 있을 때만 단계 탭 -- light·정의서·.dbm·실제 DB 만이면 물리 모델만
+  const canLevels = !!S.model && S.model.sources.some(s => s.kind === "model");
+  $("#stages").hidden = !canLevels; $("#stage-info").hidden = !canLevels;
+  if (!canLevels && S.model && S.stage !== "physical") { S.stage = "physical"; renderList(); render(); }
+  document.querySelectorAll("#stages button").forEach(b => b.setAttribute("aria-selected", b.dataset.v === S.stage));
+  document.querySelectorAll("#view button").forEach(b => b.disabled = b.dataset.v !== "all" && !S.sel.size);
+  document.querySelectorAll("#names button").forEach(b => { b.disabled = !PHYS(); b.title = PHYS() ? "" : "개념·논리 모델은 업무 이름만 보인다"; });
+  document.querySelectorAll("#level button").forEach(b => { b.disabled = S.stage === "concept" || (S.stage === "logical" && b.dataset.v === "4"); });
+  $("#theme").value = S.theme; document.body.className = "t-" + S.theme;
+  $("#live").checked = S.live; $("#live").disabled = !CFG.live;
+  if (!CFG.live) $("#live").parentElement.title = "서버가 실시간 반영 없이 시작했다 (--no-watch) -- 적용 버튼으로 다시 읽는다";
+  $("#apply").classList.toggle("due", S.pending);
+  $("#apply").textContent = S.pending ? "적용 (바뀜)" : "적용";
+  $("#pin").disabled = !S.sel.size;
+  $("#pin").textContent = S.sel.size && [...S.sel].every(id => S.pins[S.stage].has(id)) ? "고정 풀기" : "고정";
+  $("#undo").disabled = !S.prev[S.stage];
+  $("#mine").checked = S.mine; $("#mine").disabled = !CFG.save;
+  if (!CFG.save) $("#mine").parentElement.title = "이 서버는 위치를 저장하지 않는다 -- 옮긴 위치는 이 화면에서만";
+}
+function setStage(stage, draw) {
+  if (stage === S.stage) return;
+  stopJob(); jobSeq++; clearTimeout(refineTimer);   // 단계를 바꾸면 하던 배치 계산은 버린다
+  S.stage = stage; store.set("stage", stage); S.sel.clear(); S.view = "all"; S.hover = null; hideDetail();
+  if (draw !== false) { syncButtons(); renderList(); render(); }
+}
+$("#stages").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) setStage(b.dataset.v); });
+$("#level").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b || b.disabled) return; S.level = +b.dataset.v; store.set("level", S.level); syncButtons(); render(); });
+$("#names").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b || b.disabled) return; S.names = b.dataset.v; store.set("names", S.names); syncButtons(); renderList(); render(); });
+$("#view").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b || b.disabled) return; S.view = b.dataset.v; syncButtons(); render(); fit(); });
+$("#theme").addEventListener("change", (e) => { S.theme = e.target.value; store.set("theme", S.theme); syncButtons(); });
+$("#live").addEventListener("change", (e) => { S.live = e.target.checked; if (S.live && S.pending) load(false); syncButtons(); status(S.live ? "실시간 반영" : "적용을 누를 때 반영", S.live ? "" : "off"); });
+$("#mine").addEventListener("change", async (e) => {
+  await flushSaves();             // 바꾸기 전 공유 저장은 마저 보내고
+  S.mine = e.target.checked; store.set("mine", S.mine); resetLocal();
+  await load(false); status(S.mine ? "옮긴 위치를 이 브라우저에만 둔다" : "옮긴 위치를 공유 위치 파일에 둔다"); });
+$("#apply").addEventListener("click", () => load(true));
+$("#fit").addEventListener("click", () => fit());
+$("#clear").addEventListener("click", () => { S.sel.clear(); S.view = "all"; syncSel(); });
+function armed(btn, label, fn) {   // 두 번 눌러야 하는 단추
+  let t = 0;
+  btn.addEventListener("click", () => {
+    if (!t) { t = setTimeout(() => { t = 0; btn.textContent = label; }, 3000); btn.textContent = "한 번 더 누르면 " + label; return; }
+    clearTimeout(t); t = 0; btn.textContent = label; fn();
+  });
+}
+armed($("#relayout"), "자동 배치", () => { const vis = visibleIds(); autoLayout(vis.size < tables().length ? vis : null, false); });
+armed($("#reset"), "초기화", () => { S.pins[S.stage].clear(); autoLayout(null, true); });
+$("#pin").addEventListener("click", () => {
+  const set = S.pins[S.stage], all = [...S.sel].every(id => set.has(id));
+  for (const id of S.sel) { if (all) set.delete(id); else set.add(id); }
+  saveLayout(new Set([...S.sel].map(id => id.split("|")[0]))); syncButtons();
+});
+$("#undo").addEventListener("click", () => {
+  const p = S.prev[S.stage]; if (!p) return;
+  const cur = new Map([...S.pos].map(([k, v]) => [k, {...v}]));
+  for (const [id, v] of p) S.pos.set(id, {...v});
+  S.prev[S.stage] = cur;
+  saveLayout(new Set([...p.keys()].map(id => id.split("|")[0])), {previous: cur}); fit(); syncButtons(); status("직전 배치로 되돌렸다");
+});
+let qTimer = 0;
+$("#q").addEventListener("input", (e) => { S.q = e.target.value; filterList(); clearTimeout(qTimer); qTimer = setTimeout(render, 120); });
+$("#q").addEventListener("keydown", (e) => { if (e.key === "Enter") { const hits = [...document.querySelectorAll("#list .item:not(.hide)")].map(b => b.dataset.id);
+  if (hits.length) { hits.forEach(id => S.sel.add(id)); syncSel(); fit(hits); } } });
+document.addEventListener("keydown", (e) => {
+  if (e.target.matches("input,select")) return;
+  if (e.key >= "1" && e.key <= "4") { S.level = +e.key; store.set("level", S.level); syncButtons(); render(); }
+  else if (e.key === "0") fit();
+  else if (e.key === "Escape") { S.sel.clear(); S.view = "all"; syncSel(); }
+  else if (e.key === "+" || e.key === "=") { S.z = Math.min(3, S.z * 1.2); applyView(); }
+  else if (e.key === "-") { S.z = Math.max(0.1, S.z / 1.2); applyView(); }
+});
+window.addEventListener("resize", () => applyView());
+
+/* ---------------------------------------------------------------- 내보내기 */
+const VARS = ["--bg","--ink","--mute","--plate","--plate-line","--head","--rel","--hl","--sel","--frame","--frame-line","--k-code","--k-base","--k-tx","--k-hist","--k-pi","--k-con","--k-log","--font","--mono"];
+function exportSvg() {
+  const src = $("#c"), ids = [...visibleIds()], b = bbox(ids), m = 50;
+  const out = src.cloneNode(true);
+  out.removeAttribute("class"); out.removeAttribute("id");
+  const w = Math.ceil(b.x2 - b.x1 + m * 2), hh = Math.ceil(b.y2 - b.y1 + m * 2 + 40);
+  out.setAttribute("width", w); out.setAttribute("height", hh); out.setAttribute("viewBox", `${b.x1 - m} ${b.y1 - m - 40} ${w} ${hh}`);
+  out.querySelector("#world").removeAttribute("transform");
+  out.querySelectorAll(".hit").forEach(n => n.remove());
+  out.querySelectorAll(".flow,.on,.match").forEach(n => n.classList.remove("flow", "on", "match"));
+  const cs = getComputedStyle(document.body);
+  let css = ":root{" + VARS.map(v => `${v}:${cs.getPropertyValue(v)}`).join(";") + "}";
+  for (const sh of document.styleSheets) for (const rule of sh.cssRules) if (/^\.(frame|ent|rel|k-)/.test(rule.selectorText || "")) css += rule.cssText;
+  const st = document.createElementNS(NS, "style"); st.textContent = css; out.insertBefore(st, out.firstChild);
+  const bg = document.createElementNS(NS, "rect"); for (const [k, v] of Object.entries({x: b.x1 - m, y: b.y1 - m - 40, width: w, height: hh, fill: cs.getPropertyValue("--bg").trim()})) bg.setAttribute(k, v);
+  out.insertBefore(bg, st.nextSibling);
+  return {text: '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(out), w, h: hh};
+}
+function download(blob, name) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); }
+const fname = (ext) => (($("#sub").textContent || "erd").replace(/[^\w가-힣.-]+/g, "_")) + "-" + S.stage + "." + ext;
+$("#svg").addEventListener("click", () => { const s = exportSvg(); download(new Blob([s.text], {type: "image/svg+xml"}), fname("svg")); status("SVG 로 내보냈다"); });
+$("#png").addEventListener("click", () => {
+  const s = exportSvg(), img = new Image(), scale = 2;
+  img.onload = () => { const c = document.createElement("canvas"); c.width = s.w * scale; c.height = s.h * scale; const x = c.getContext("2d"); x.scale(scale, scale); x.drawImage(img, 0, 0);
+    URL.revokeObjectURL(img.src); c.toBlob(b => { download(b, fname("png")); status("PNG 로 내보냈다"); }); };
+  img.onerror = () => status("PNG 로 바꾸지 못했다 -- SVG 로 내보낸다", "bad");
+  img.src = URL.createObjectURL(new Blob([s.text], {type: "image/svg+xml"}));
+});
+
+syncButtons(); status(S.live ? "읽는 중" : "적용을 누를 때 반영", S.live ? "" : "off");
+if (!hasLayout()) status("배치 모듈(erdlayout.js)을 읽지 못해 간단한 격자로 놓는다", "bad");
+load(false).then(listen);
+</script>
+</body>
+</html>

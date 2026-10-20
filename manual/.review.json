@@ -1,0 +1,14 @@
+{
+ "pages": 32,
+ "files": {
+  "assets/manual.css": "25f0d5c9d89b538c",
+  "assets/manual.js": "082df3a3c684bd52",
+  "index.html": "5797e50d2cd825e5",
+  "lecture.html": "393a5089cff13c0f"
+ },
+ "overflow": [],
+ "sheets": [
+  ".manual-review/index.png",
+  ".manual-review/lecture.png"
+ ]
+}

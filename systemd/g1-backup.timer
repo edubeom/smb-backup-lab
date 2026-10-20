@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily G1 backup at 04:00 Asia/Seoul
+
+[Timer]
+OnCalendar=*-*-* 04:00:00 Asia/Seoul
+Persistent=true
+Unit=g1-backup.service
+
+[Install]
+WantedBy=timers.target

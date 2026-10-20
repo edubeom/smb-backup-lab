@@ -1,0 +1,13 @@
+{
+  "recorded_at": "2026-10-20T14:19:39.098226+09:00",
+  "evidence": "user supplied first_backup.py terminal result",
+  "first_full_shared_backup": "verified",
+  "selected_project_ssh_cloudflare_restore": "verified",
+  "mail_sqlite_integrity": "passed",
+  "isolated_mailbox_readback_count": 7,
+  "services_interrupted": false,
+  "full_service_restore_validated": false,
+  "timer_enabled": false,
+  "existing_backup_deleted": false,
+  "snapshot_size_bytes": "not yet accessible to agent"
+}

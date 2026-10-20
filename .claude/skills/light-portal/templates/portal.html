@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<style>
+:root {
+  --bg: #f7f5f0; --panel: #ffffff; --ink: #22201c; --muted: #6a645b; --line: #e6e1d6; --soft: #f0ece3;
+  --accent: #c2572f; --accent-ink: #ffffff; --accent-soft: #f8e3d9;
+  --ok: #2f7a4b; --ok-soft: #e0f0e5; --warn: #9a6400; --warn-soft: #f8ecd2; --bad: #b0352b; --bad-soft: #f8e1de;
+  --user: #6c3fa0; --user-soft: #efe6f8; --ai: #23657a; --ai-soft: #dff0f4;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171513; --panel: #211e1b; --ink: #ece7df; --muted: #a39b8f; --line: #36312b; --soft: #2a2622;
+    --accent: #f08a5d; --accent-ink: #1d120c; --accent-soft: #3a261c;
+    --ok: #7cc795; --ok-soft: #1f3327; --warn: #e2b55c; --warn-soft: #382d17; --bad: #f08b80; --bad-soft: #3a2220;
+    --user: #c9a3f0; --user-soft: #30253d; --ai: #7fc6da; --ai-soft: #1c3138; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171513; --panel: #211e1b; --ink: #ece7df; --muted: #a39b8f; --line: #36312b; --soft: #2a2622;
+  --accent: #f08a5d; --accent-ink: #1d120c; --accent-soft: #3a261c;
+  --ok: #7cc795; --ok-soft: #1f3327; --warn: #e2b55c; --warn-soft: #382d17; --bad: #f08b80; --bad-soft: #3a2220;
+  --user: #c9a3f0; --user-soft: #30253d; --ai: #7fc6da; --ai-soft: #1c3138; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); }
+a { color: var(--accent); }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: 16px; padding-right: 16px; }
+header { background: var(--panel); border-bottom: 1px solid var(--line); }
+.top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; padding: 18px 0 8px; }
+.top h1 { font-size: 21px; margin: 0; }
+.meta { color: var(--muted); font-size: 13px; }
+.theme { margin-left: auto; border: 1px solid var(--line); background: var(--soft); color: var(--ink); border-radius: 8px; padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+nav { display: flex; overflow-x: auto; scrollbar-width: none; }
+nav::-webkit-scrollbar { display: none; }
+nav a { padding: 10px 14px; text-decoration: none; color: var(--muted); border-bottom: 2px solid transparent; white-space: nowrap; font-weight: 500; }
+nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+main.wrap { padding-top: 22px; padding-bottom: 40px; }
+h2 { font-size: 17px; margin: 24px 0 10px; }
+h2:first-child { margin-top: 0; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; min-width: 0; overflow-wrap: anywhere; }
+.card + .card { margin-top: 12px; }
+.grid .card + .card { margin-top: 0; }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 16px; }
+.stat .v { font-size: 24px; font-weight: 650; } .stat .k { color: var(--muted); font-size: 13px; }
+.pill { display: inline-block; font-size: 12px; line-height: 1; padding: 4px 8px; border-radius: 999px; background: var(--soft); color: var(--muted); white-space: nowrap; font-weight: 600; }
+.pill.user { background: var(--user-soft); color: var(--user); } .pill.ai { background: var(--ai-soft); color: var(--ai); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.warn { background: var(--warn-soft); color: var(--warn); } .pill.bad { background: var(--bad-soft); color: var(--bad); }
+.list { display: flex; flex-direction: column; gap: 8px; }
+.row { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; min-width: 0; overflow-wrap: anywhere; }
+.row .h { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.row .t { font-weight: 600; } .row .s { color: var(--muted); font-size: 13px; }
+details.row > summary { list-style: none; cursor: pointer; }
+details.row > summary::-webkit-details-marker { display: none; }
+details.row > summary .t::after { content: " ▾"; color: var(--muted); font-weight: 400; font-size: 12px; }
+details.row[open] > summary .t::after { content: " ▴"; }
+details.row:hover { border-color: var(--accent); }
+.quote { border-left: 3px solid var(--user); background: var(--user-soft); padding: 4px 10px; border-radius: 0 8px 8px 0; margin-top: 6px; }
+.empty { color: var(--muted); padding: 18px; text-align: center; background: var(--panel); border: 1px dashed var(--line); border-radius: 12px; }
+.tbl { overflow-x: auto; margin: 10px 0; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { background: var(--soft); color: var(--muted); font-size: 12px; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+code { font-family: var(--mono); font-size: 13px; background: var(--soft); padding: 1px 5px; border-radius: 5px; }
+pre { background: var(--soft); border-radius: 8px; padding: 10px 12px; overflow-x: auto; font: 13px/1.5 var(--mono); }
+.doc h1 { font-size: 20px; margin-top: 0; } .doc h2 { font-size: 17px; } .doc h3 { font-size: 15px; }
+.doc blockquote, .doc .note { color: var(--muted); border-left: 3px solid var(--line); margin: 8px 0; padding: 2px 12px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.chip { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 999px; padding: 5px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+select { font: inherit; font-size: 14px; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); }
+.when { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+ul.cols { list-style: none; margin: 10px 0 0; padding: 0; border-top: 1px solid var(--line); }
+ul.cols li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding: 7px 2px; border-bottom: 1px solid var(--line); }
+ul.cols li:last-child { border-bottom: 0; }
+ul.cols .n { font-weight: 600; min-width: 6em; } ul.cols .d { color: var(--muted); font-size: 14px; }
+footer.wrap { color: var(--muted); font-size: 12px; padding-bottom: 32px; overflow-wrap: anywhere; }
+/* 한눈에 -- 기능 → 파일 → 표 그림 */
+.dia { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 6px 0; }
+.dia svg { display: block; font-family: var(--sans); }
+.dia .col { fill: var(--muted); font-size: 12px; font-weight: 600; }
+.dia .nd rect { fill: var(--soft); stroke: var(--line); }
+.dia .nd.f rect { fill: var(--panel); stroke: var(--accent); }
+.dia .nd.sh rect { stroke-dasharray: 4 3; }
+.dia .nd.t rect { fill: var(--ai-soft); stroke: var(--ai); }
+.dia .nd.miss rect { stroke: var(--bad); }
+.dia .nd text { fill: var(--ink); font-size: 13px; }
+.dia .nd text.s { fill: var(--muted); font-size: 11px; }
+.dia path { fill: none; stroke: var(--muted); stroke-opacity: .55; stroke-width: 1.3; }
+.dia path.t { stroke: var(--ai); }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top"><h1 id="title"></h1><span class="meta" id="meta"></span>
+    <button class="theme" id="theme" type="button" aria-label="화면 밝기 바꾸기">밝기</button></div>
+  <nav id="nav" aria-label="기록 메뉴"></nav>
+</div></header>
+<main class="wrap" id="main"></main>
+<footer class="wrap" id="foot"></footer>
+<script type="application/json" id="data">__DATA__</script>
+<script>
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("data").textContent), N = D.notes;
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]; }); }
+  function pill(t, c) { return '<span class="pill ' + (c || "") + '">' + esc(t) + "</span>"; }
+  function empty(s) { return '<div class="empty">' + esc(s) + "</div>"; }
+  function stripComments(s) { return String(s || "").replace(/<!--[\s\S]*?-->/g, ""); }
+
+  $("title").textContent = D.project;
+  $("meta").textContent = "만든 시각 " + D.generated_at.slice(0, 16).replace("T", " ");
+  $("foot").textContent = "이 페이지는 " + D.folder + " 의 dev-notes 기록과 저장 목록으로 만든 파일입니다. 내 컴퓨터에서만 열립니다. 저장할 때마다 새로 만들어집니다.";
+  var root = document.documentElement;
+  try { var th = localStorage.getItem("light-portal-theme"); if (th) root.setAttribute("data-theme", th); } catch (e) {}
+  $("theme").onclick = function () {
+    var dark = root.getAttribute("data-theme") ? root.getAttribute("data-theme") === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.setAttribute("data-theme", dark ? "light" : "dark");
+    try { localStorage.setItem("light-portal-theme", root.getAttribute("data-theme")); } catch (e) {}
+  };
+
+  function inline(s) {
+    s = esc(s);
+    s = s.replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    return s.replace(/\[([^\]]+)\]\((https?:[^)\s]+|[^):\s]+)\)/g, '<a href="$2">$1</a>');   // javascript: 같은 주소는 링크로 만들지 않는다
+  }
+  function md(src) {
+    var lines = stripComments(src).replace(/\r/g, "").split("\n"), out = [], i = 0;
+    while (i < lines.length) {
+      var l = lines[i];
+      if (/^```/.test(l)) { var b = []; i++; while (i < lines.length && !/^```/.test(lines[i])) b.push(lines[i++]); i++; out.push("<pre>" + esc(b.join("\n")) + "</pre>"); continue; }
+      var h = /^(#{1,4})\s+(.*)$/.exec(l);
+      if (h) { var n = h[1].length; out.push("<h" + n + ">" + inline(h[2]) + "</h" + n + ">"); i++; continue; }
+      if (/^\s*\|.*\|\s*$/.test(l) && i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])) {
+        var cells = function (r) { return r.trim().replace(/^\||\|$/g, "").split("|").map(function (c) { return c.trim(); }); };
+        var head = cells(l), rows = []; i += 2;
+        while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) rows.push(cells(lines[i++]));
+        out.push('<div class="tbl"><table><thead><tr>' + head.map(function (c) { return "<th>" + inline(c) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+          rows.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + inline(c) + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>");
+        continue;
+      }
+      if (/^\s*([-*]|\d+\.)\s+/.test(l)) {
+        var items = [];
+        while (i < lines.length && /^\s*([-*]|\d+\.)\s+/.test(lines[i])) items.push(lines[i++].replace(/^\s*([-*]|\d+\.)\s+/, "").replace(/^\[ \]\s*/, "☐ ").replace(/^\[x\]\s*/i, "☑ "));
+        out.push("<ul>" + items.map(function (x) { return "<li>" + inline(x) + "</li>"; }).join("") + "</ul>"); continue;
+      }
+      if (/^>\s?/.test(l)) { var q = []; while (i < lines.length && /^>\s?/.test(lines[i])) q.push(lines[i++].replace(/^>\s?/, "")); out.push('<div class="note">' + inline(q.join(" ")) + "</div>"); continue; }
+      if (!l.trim()) { i++; continue; }
+      var p = []; while (i < lines.length && lines[i].trim() && !/^(#{1,4}\s|```|\s*([-*]|\d+\.)\s|>|\s*\|)/.test(lines[i])) p.push(lines[i++]);
+      if (!p.length) p.push(lines[i++]);
+      out.push("<p>" + inline(p.join(" ")) + "</p>");
+    }
+    return out.join("\n");
+  }
+  function doc(name, hint) { return N[name] ? '<div class="card doc">' + md(N[name]) + "</div>" : empty(hint); }
+
+  // "- 날짜 시각 · 단계 · 무엇을 · 결과 · 누가"
+  function logRows(text) {
+    var rows = [];
+    stripComments(text).split("\n").forEach(function (l) {
+      var m = /^-\s+(\d{4}-\d{2}-\d{2}(?:\s+\d{1,2}:\d{2})?)\s+·\s+(.+)$/.exec(l.trim());
+      if (!m) return;
+      var p = m[2].split(/\s+·\s+/);
+      // 새 형식: 단계 · 기능 · 무엇을 · 결과 · 누가 / 예전(0.6.0): 단계 · 무엇을 · 결과 · 누가
+      var r = p.length >= 5 ? { step: p[0], feature: p[1], what: p[2], result: p[3], who: p[4] }
+                            : { step: p[0] || "", feature: "", what: p[1] || "", result: p[2] || "", who: p[3] || "" };
+      r.when = m[1];
+      rows.push(r);
+    });
+    return rows;
+  }
+  // "- 날짜 [사용자] 무엇 -- "원문"" / "- 날짜 [AI] 무엇 -- 이유 (다른 안: …)" / 예전 형식 "- 날짜: 무엇 -- 이유"
+  function decisionRows(text) {
+    var rows = [];
+    stripComments(text).split("\n").forEach(function (l) {
+      var m = /^-\s+(\d{4}-\d{2}-\d{2}):?\s+(?:\[(사용자|AI)\]\s+)?(.+)$/.exec(l.trim());
+      if (!m) return;
+      var body = m[3], i = body.indexOf(" -- ");
+      rows.push({ when: m[1], who: m[2] || "", what: i >= 0 ? body.slice(0, i) : body, why: i >= 0 ? body.slice(i + 4) : "" });
+    });
+    return rows;
+  }
+  var FLOG = {}; (D.feature_logs || []).forEach(function (x) { FLOG[x.feature + "/" + x.date] = x; });
+  D.feature_logs = D.feature_logs || [];
+  function folder(name) { return String(name).trim().replace(/\s+/g, "-"); }
+  var STEPC = { "기획": "ai", "만들기": "", "확인": "warn", "운영": "", "평가": "user" };
+  function resultPill(r) { return r ? pill(r, /실패|안 됨|문제|오류/.test(r) ? "bad" : /못|기다|대기|중/.test(r) ? "warn" : /완료|통과|확인|저장|해결|ok/i.test(r) ? "ok" : "") : ""; }
+  function whoPill(w) { return w ? pill(w, /사용자|나/.test(w) ? "user" : "ai") : ""; }
+
+  // 데이터 (짝 스킬 data-light 의 정본 data/model.light.json -- 구조만)
+  var TYPE = { id: "자동 번호", ref: "다른 표를 가리킴", text: "짧은 글", long_text: "긴 글", int: "정수", number: "숫자",
+               money: "금액", bool: "예/아니오", date: "날짜", datetime: "날짜+시각", owner: "만든 사람 (로그인 계정)" };
+  var ACCESS = { members: "로그인한 사람 모두", own: "만든 사람만", read: "누구나 읽기만" };
+  var word = function (map, k) { return Object.prototype.hasOwnProperty.call(map, k) ? map[k] : String(k); };
+  var accessWord = function (a) {   // 한 값 또는 [읽기, 쓰기] 두 개 목록 (게시판 ["read", "own"])
+    if (!Array.isArray(a)) return word(ACCESS, a);
+    return a.length === 2 ? "읽기 " + word({ read: "누구나", members: "로그인한 사람 모두", own: "만든 사람만" }, a[0]) +
+      " · 쓰기 " + word({ read: "누구나", members: "로그인한 사람 모두", own: "만든 사람만" }, a[1]) : a.map(function (x) { return word(ACCESS, x); }).join(" · ");
+  };
+  var KIND = { design: "설계까지", load: "파일 넣기", manage: "데이터 관리", analyze: "분석" };
+  var SIGNUP = { closed: "새 가입을 끈 사이트 (정해진 사람끼리) -- Supabase 의 새 가입·익명 로그인이 실제로 꺼져 있어야 합니다",
+                 open: "누구나 가입하는 사이트" };
+  var DEL = { keep: "가리키는 행이 있으면 못 지움", "delete": "같이 지워짐", clear: "비워짐" };
+  var PI = { name: "이름", phone: "전화번호", email: "이메일", address: "주소", birth: "생년월일", id_number: "고유번호",
+             account: "계좌", health: "건강", photo: "사진", location: "위치", other: "기타" };
+  function usedBy() {     // FEATURES.md 의 "## 데이터 (표)" 절: | 표 | 이름표 | 쓰는 기능 |
+    var m = /\n##\s*데이터[^\n]*\n([\s\S]*?)(?=\n##\s|$)/.exec("\n" + stripComments(N.FEATURES || "")), out = Object.create(null);
+    if (!m) return out;
+    m[1].split("\n").forEach(function (l) {
+      if (!/^\s*\|/.test(l) || /^\s*\|[\s:|-]+\|\s*$/.test(l) || /\(예\)/.test(l)) return;
+      var c = l.trim().replace(/^\||\|$/g, "").split("|").map(function (x) { return x.trim(); });
+      if (c[0] && c[0] !== "표" && c.length >= 3) out[c[0].replace(/`/g, "")] = c[2];
+    });
+    return out;
+  }
+  function cut(s, n) { s = String(s == null ? "" : s); var w = 0, out = ""; for (var i = 0; i < s.length; i++) { var ch = s.charAt(i);
+    w += /[\u1100-\u11ff\u3130-\u318f\uac00-\ud7af]/.test(ch) ? 1 : 0.55; if (w > n) return out + "…"; out += ch; } return out; }
+  function mapView() {      // 내 시스템 한눈에 -- 기능 지도(FEATURES.md) · 데이터 정본 · 프로젝트 파일에서 (AI 가 그린 그림이 아니다)
+    var M = D.map || {}, h = "";
+    var feats = M.features || [], parts = M.parts || [], tl = M.tools || [], tabs = M.tables || [];
+    h += '<p class="s">문제가 생기면 코드 전체를 훑지 않고 여기서 고칠 곳부터 찾습니다 -- 기능 → 쓰는 파일 → 표. AI 는 ' +
+      "<code>python .claude/skills/light-portal/portal_tool.py where \"오류 글·화면 이름\"</code> 로 같은 것을 찾습니다.</p>";
+    if (!feats.length && (M.works || []).length) {      // 기능이 아직 없으면 데이터 설계의 하는 일 → 표
+      var W2 = 230, G2 = 90, H2 = 34, V2 = 10, tl2 = [], tix = {};
+      M.works.forEach(function (w) { w.uses.forEach(function (t) { if (!(t in tix)) { tix[t] = tl2.length; tl2.push(t); } }); });
+      var y2 = function (i) { return 34 + i * (H2 + V2); }, hg = 44 + Math.max(M.works.length, tl2.length) * (H2 + V2);
+      var lab = {}; (D.data && D.data.tables || []).forEach(function (t) { lab[t.name] = t.label; });
+      var sv = '<svg width="' + (16 + 2 * W2 + G2 + 16) + '" height="' + hg + '" role="img" aria-label="하는 일 → 표"><text class="col" x="16" y="20">하는 일 (데이터 설계)</text>' +
+        '<text class="col" x="' + (16 + W2 + G2) + '" y="20">표</text>';
+      M.works.forEach(function (w, i) { w.uses.forEach(function (t) { var x1 = 16 + W2, x2 = 16 + W2 + G2, a = y2(i) + H2 / 2, b = y2(tix[t]) + H2 / 2, m = (x1 + x2) / 2;
+        sv += '<path class="t" d="M' + x1 + "," + a + " C" + m + "," + a + " " + m + "," + b + " " + x2 + "," + b + '"/>'; }); });
+      M.works.forEach(function (w, i) { sv += '<g class="nd f"><rect x="16" y="' + y2(i) + '" width="' + W2 + '" height="' + H2 + '" rx="8"/><text x="26" y="' + (y2(i) + 21) + '">' + esc(cut(w.name, 19)) + "</text></g>"; });
+      tl2.forEach(function (t, i) { sv += '<g class="nd t"><rect x="' + (16 + W2 + G2) + '" y="' + y2(i) + '" width="' + W2 + '" height="' + H2 + '" rx="8"/><text x="' + (26 + W2 + G2) + '" y="' + (y2(i) + 21) + '">' +
+        esc(cut((lab[t] ? lab[t] + " · " : "") + t, 22)) + "</text></g>"; });
+      h += "<h2>하는 일 → 표 <span class=\"s\">-- 아직 기능(화면)이 없어 데이터 설계의 하는 일로</span></h2>" + '<div class="dia">' + sv + "</svg></div>";
+    } else if (!feats.length && !parts.length) h += empty("기능 지도(FEATURES.md)에 아직 기능이 없습니다 -- 첫 기능을 만들면 AI 가 채웁니다");
+    if (feats.length) {
+      var files = [], fileIx = {}, shared = {};
+      (M.shared || []).forEach(function (f) { shared[f] = 1; });
+      feats.forEach(function (f) { f.files.forEach(function (x) { if (!(x in fileIx)) { fileIx[x] = files.length; files.push(x); } }); });
+      (M.shared || []).forEach(function (x) { if (!(x in fileIx)) { fileIx[x] = files.length; files.push(x); } });
+      var tnames = tabs.filter(function (t) { return feats.some(function (f) { return t.features.indexOf(f.name) >= 0; }); });
+      var W = 210, G = 90, H = 34, V = 10, X = [16, 16 + W + G, 16 + 2 * (W + G)];
+      var rows = Math.max(feats.length, files.length, tnames.length), hgt = 40 + rows * (H + V) + 10;
+      var y = function (i) { return 34 + i * (H + V); };
+      var miss = {}; (M.missing || []).forEach(function (f) { miss[f] = 1; });
+      var svg = '<svg width="' + (X[2] + W + 16) + '" height="' + hgt + '" viewBox="0 0 ' + (X[2] + W + 16) + " " + hgt + '" role="img" aria-label="기능 → 파일 → 표">' +
+        '<text class="col" x="' + X[0] + '" y="20">기능</text><text class="col" x="' + X[1] + '" y="20">쓰는 파일</text>' + (tnames.length ? '<text class="col" x="' + X[2] + '" y="20">표 (데이터)</text>' : "");
+      var curve = function (x1, y1, x2, y2, c) { var m = (x1 + x2) / 2; return '<path class="' + (c || "") + '" d="M' + x1 + "," + y1 + " C" + m + "," + y1 + " " + m + "," + y2 + " " + x2 + "," + y2 + '"/>'; };
+      feats.forEach(function (f, i) {
+        f.files.forEach(function (x) { svg += curve(X[0] + W, y(i) + H / 2, X[1], y(fileIx[x]) + H / 2); });
+        tnames.forEach(function (t, k) { if (t.features.indexOf(f.name) >= 0) svg += curve(X[0] + W, y(i) + H / 2, X[2], y(k) + H / 2, "t"); });
+      });
+      feats.forEach(function (f, i) { svg += '<g class="nd f"><rect x="' + X[0] + '" y="' + y(i) + '" width="' + W + '" height="' + H + '" rx="8"/><text x="' + (X[0] + 10) + '" y="' + (y(i) + 21) + '">' +
+        esc(cut((f.state ? f.state.split(" ")[0] + " " : "") + f.name, 17)) + "</text><title>" + esc(f.name + " · " + f.state) + "</title></g>"; });
+      files.forEach(function (x, i) { svg += '<g class="nd' + (shared[x] ? " sh" : "") + (miss[x] ? " miss" : "") + '"><rect x="' + X[1] + '" y="' + y(i) + '" width="' + W + '" height="' + H + '" rx="8"/><text x="' + (X[1] + 10) +
+        '" y="' + (y(i) + 21) + '">' + esc(cut(x, 24)) + (shared[x] ? ' <tspan class="s">함께</tspan>' : "") + "</text><title>" + esc(x + (miss[x] ? " -- 파일이 없다" : "")) + "</title></g>"; });
+      tnames.forEach(function (t, k) { svg += '<g class="nd t"><rect x="' + X[2] + '" y="' + y(k) + '" width="' + W + '" height="' + H + '" rx="8"/><text x="' + (X[2] + 10) + '" y="' + (y(k) + 21) + '">' +
+        esc(cut((t.label || t.name) + " · " + t.name, 22)) + "</text></g>"; });
+      h += "<h2>기능 → 쓰는 파일 → 표</h2>" + '<div class="dia">' + svg + "</svg></div>" +
+        '<p class="s">점선 = 여러 기능이 함께 쓰는 파일 (고치면 모든 기능을 점검) · 빨간 테두리 = 기능 지도에는 있는데 파일이 없다</p>';
+    }
+    h += "<h2>구성 -- 어디서 돌고 무엇을 쓰나</h2>";
+    h += parts.length ? '<div class="tbl"><table><thead><tr><th>부분</th><th>무엇으로</th><th>어디서</th><th>파일·설정</th></tr></thead><tbody>' +
+      parts.map(function (p) { return "<tr><td style=\"white-space:nowrap\"><strong>" + esc(p.part) + "</strong></td><td>" + esc(p.what) + "</td><td>" + esc(p.where) + "</td><td>" +
+        p.files.map(function (f) { return "<code>" + esc(f) + "</code>"; }).join(" ") + "</td></tr>"; }).join("") + "</tbody></table></div>"
+      : empty("FEATURES.md 의 '구성' 절이 비어 있습니다 -- AI 가 프로젝트를 보고 채웁니다 (화면 · 저장 · 올리는 곳)");
+    h += "<h2>쓰는 도구와 버전 <span class=\"s\">-- 파일에서 직접 읽음</span></h2>";
+    h += tl.length ? '<div class="tbl"><table><thead><tr><th>도구</th><th>버전</th><th>어디에 적혀 있나</th></tr></thead><tbody>' +
+      tl.map(function (t) { return "<tr><td>" + esc(t.name) + "</td><td><code>" + esc(t.version) + "</code></td><td>" + esc(t.file) + "</td></tr>"; }).join("") + "</tbody></table></div>"
+      : empty("package.json · requirements.txt · .python-version 같은 파일이 없습니다 (HTML·자바스크립트만 쓰는 사이트는 없어도 됩니다)");
+    if ((M.unlisted || []).length || (M.missing || []).length) {
+      h += "<h2>기능 지도와 맞지 않는 것</h2>";
+      if (M.unlisted.length) h += '<div class="row"><div class="h">' + pill("지도에 없는 파일 " + M.unlisted.length + "개", "warn") + '</div><div class="s">' + M.unlisted.map(function (f) { return "<code>" + esc(f) + "</code>"; }).join(" ") +
+        " -- 어느 기능의 파일인지 FEATURES.md 에 적습니다 (그래야 문제가 났을 때 찾습니다)</div></div>";
+      if (M.missing.length) h += '<div class="row"><div class="h">' + pill("지도에는 있는데 없는 파일 " + M.missing.length + "개", "bad") + '</div><div class="s">' + M.missing.map(function (f) { return "<code>" + esc(f) + "</code>"; }).join(" ") +
+        " -- 이름이 바뀌었거나 지웠으면 FEATURES.md 를 고칩니다</div></div>";
+    }
+    return h;
+  }
+  function dataView() {
+    var d = D.data;
+    if (d.error) return empty(d.error + " (" + d.file + ")");
+    var used = usedBy(), byName = Object.create(null);
+    d.tables = (d.tables || []).filter(function (t) { return t && typeof t === "object"; });
+    d.tables.forEach(function (t) { t.columns = Array.isArray(t.columns) ? t.columns : []; });
+    d.tables.forEach(function (t) { byName[t.name] = t; });
+    var lab = function (n) { return byName[n] && byName[n].label ? byName[n].label : String(n); };
+    var rels = [], pis = 0;
+    d.tables.forEach(function (t) {
+      if (/^pi_/.test(t.name)) pis++;
+      t.columns.forEach(function (c) { if (c.type === "ref" && c.ref) rels.push({ from: t, col: c }); });
+    });
+    var links = Object.keys(d.links || {}).map(function (k) {
+      return '<a href="' + esc(d.links[k]) + '">' + esc({ "book.html": "데이터 설명서 (book.html)", "erd.md": "관계 그림 (erd.md)", "spec.md": "정의서 (spec.md)", "schema.sql": "만드는 SQL (schema.sql)" }[k] || k) + "</a>";
+    }).join(" · ");
+    var h = '<div class="grid">' +
+      '<div class="card stat"><div class="v">' + d.tables.length + '</div><div class="k">표</div></div>' +
+      '<div class="card stat"><div class="v">' + rels.length + '</div><div class="k">표 사이 연결</div></div>' +
+      '<div class="card stat"><div class="v">' + pis + '</div><div class="k">개인정보 표 (pi_)</div></div>' +
+      '<div class="card stat"><div class="v" style="font-size:20px">' + esc(d.db === "postgresql" ? "Supabase" : "SQLite") + '</div><div class="k">' +
+        esc(d.db === "postgresql" ? "DB (PostgreSQL)" : "DB (파일 하나)") + "</div></div></div>" +
+      '<div class="card" style="margin-bottom:12px"><span class="s" style="color:var(--muted)">설계 원본 <code>' + esc(d.file) + "</code> -- 짝 스킬 data-light 가 만들고 고칩니다. " +
+      "사람 정보(이름·연락처 등)는 <code>pi_</code> 로 시작하는 표에 따로 둡니다.</span>" + (links ? "<div>" + links + "</div>" : "") +
+      '<div class="s" style="margin-top:6px">만드는 것: ' + (d.product && d.product.kinds.length
+        ? esc(d.product.kinds.map(function (k) { return word(KIND, k); }).join(" · ") +
+              (d.product.main && d.product.kinds.length > 1 ? " (주 목적: " + word(KIND, d.product.main) + ")" : "")) +
+          (d.product.said ? ' <span style="color:var(--muted)">-- 사용자 말: "' + esc(d.product.said) + '"</span>' : "")
+        : "정하지 않음 -- 정본에 product 가 없으면 데이터 검사(verify)가 통과하지 않습니다") + "</div>" +
+      (d.db === "postgresql" ? '<div class="s" style="margin-top:6px">누가 볼 수 있나: ' +
+        esc(d.signup ? word(SIGNUP, d.signup) : d.tables.some(function (t) { return t.access; }) ? "새 가입은 정하지 않음 (표마다 아래 '쓰는 사람')"
+            : "아직 정하지 않음 -- 정본에 signup·access 를 적기 전에는 공개용 키로 아무 표도 못 씁니다") + "</div>" : "") +
+      ((d.outside || []).length ? '<div class="s" style="margin-top:6px">정본 밖에 둔 표 (검사하지 않음): ' + esc(d.outside.join(", ")) + "</div>" : "") +
+      "</div>";
+    if ((d.goals || []).length || (d.not_doing || []).length) h += "<h2>성공 기준 -- 이 데이터로 할 수 있어야 하는 것</h2>" + '<div class="list">' +
+      (d.goals || []).map(function (g, i) {
+        return '<details class="row"><summary><div class="h">' + pill("기준 " + (i + 1), "ok") + '<span class="t">' + esc(g.say) + "</span></div></summary>" +
+          (g.sql ? '<pre style="white-space:pre-wrap">' + esc(g.sql) + "</pre>" : "") + "</details>";
+      }).join("") +
+      ((d.not_doing || []).length ? '<div class="row"><div class="h">' + pill("이번엔 안 함", "") + '<span class="t">' + esc(d.not_doing.join(", ")) + "</span></div></div>" : "") +
+      '</div><p class="s" style="color:var(--muted)">확인은 <code>datalight.py verify</code> 가 샘플 데이터로 실제로 돌려 봅니다.</p>';
+    var works = Array.isArray(d.works) ? d.works : [];
+    var OPK = { C: "만들기", R: "읽기", U: "고치기", D: "지우기" };
+    var ops = function (s) { return ["C", "R", "U", "D"].filter(function (o) { return String(s).toUpperCase().indexOf(o) >= 0; }).map(function (o) { return OPK[o]; }).join("·"); };
+    if (works.length) h += "<h2>하는 일 -- 누가 · 어느 화면에서 · 어느 표를</h2>" + '<div class="list">' + works.map(function (w) {
+      return '<div class="row"><div class="h"><span class="t">' + esc(w.name) + "</span>" + (w.who ? '<span class="s">' + esc(w.who) + "</span>" : "") +
+        (w.screen.length ? '<span class="s">화면: ' + esc(w.screen.join(", ")) + "</span>" : "") + "</div>" +
+        (w.say ? '<div class="s">' + esc(w.say) + "</div>" : "") +
+        '<div class="s">' + Object.keys(w.uses).map(function (t) { return esc(lab(t)) + " " + esc(ops(w.uses[t])); }).join(" · ") + "</div></div>";
+    }).join("") + "</div>";
+    if (rels.length) h += "<h2>표 사이 연결</h2>" + '<div class="list">' + rels.map(function (r) {
+      return '<div class="row"><div class="h"><span class="t">' + esc(lab(r.from.name)) + " → " + esc(lab(r.col.ref)) + "</span>" +
+        '<span class="s">' + esc(r.col.label || r.col.name) + (r.col.key ? " · 짝" : "") + " · 지우면: " + esc(DEL[r.col.on_delete || "keep"] || r.col.on_delete) + "</span></div></div>";
+    }).join("") + "</div>";
+    h += "<h2>표</h2>" + '<div class="list">' + d.tables.map(function (t) {
+      var pi = /^pi_/.test(t.name);
+      var rows = t.columns.map(function (c) {
+        var etc = [TYPE[c.type] || c.type || ""];
+        if (c.required || c.type === "id") etc.push("필수");
+        if (c.unique) etc.push("같은 값 금지");
+        if (Array.isArray(c.choices)) etc.push("고르기: " + c.choices.join(", "));
+        if (c.ref) etc.push("→ " + lab(c.ref));
+        if (c.key) etc.push("키");
+        if (c.personal) etc.push("개인정보" + (c.personal === true ? "" : " (" + (PI[c.personal] || c.personal) + ")"));
+        if (c.about) etc.push(c.about);
+        return '<li><span class="n">' + esc(c.label || c.name) + "</span><code>" + esc(c.name) + '</code><span class="d">' + esc(etc.filter(Boolean).join(" · ")) + "</span></li>";
+      }).join("");
+      (Array.isArray(t.unique) ? t.unique : []).forEach(function (u) {
+        if (!Array.isArray(u)) return;
+        var labs = u.map(function (n) { var c = t.columns.filter(function (x) { return x.name === n; })[0]; return c && c.label ? c.label : String(n); });
+        rows += '<li><span class="n">묶음 중복 금지</span><span class="d">' + esc(labs.join(" + ")) + " 이 같은 행은 한 번만</span></li>";
+      });
+      if (t.timestamps) rows += '<li><span class="d">+ 만든 때·고친 때 (자동으로 기록)</span></li>';
+      return '<details class="row"><summary><div class="h">' + (pi ? pill("개인정보", "warn") : "") + '<span class="t">' + esc(t.label || t.name) + "</span>" +
+        '<span class="s"><code>' + esc(t.name) + "</code> · 칸 " + t.columns.length + "</span>" +
+        (d.db !== "postgresql" ? "" : (Array.isArray(t.access) ? t.access.length : t.access) ? '<span class="s">쓰는 사람: ' + esc(accessWord(t.access)) + "</span>"
+                                   : '<span class="s">쓰는 사람: 규칙 없음 (공개용 키로 못 씀)</span>') +
+        (used[t.name] ? '<span class="s">쓰는 기능: ' + esc(used[t.name]) + "</span>" : "") + "</div></summary>" +
+        (t.about ? '<div class="s" style="margin-top:6px">' + esc(t.about) + "</div>" : "") +
+        '<ul class="cols">' + rows + "</ul></details>";
+    }).join("") + "</div>";
+    return h;
+  }
+
+  var VIEWS = {
+    now: ["지금", function () {
+      var feats = String(N.FEATURES || "").split(/\n##\s/)[0].split("\n").filter(function (l) { return /^\|/.test(l) && !/^\|\s*-/.test(l) && !/기능\s*\|\s*상태/.test(l) && !/\(예\)/.test(l); });
+      var count = function (re) { return feats.filter(function (l) { return re.test(l); }).length; };
+      var log = logRows(N.LOG || ""), kinds = {};
+      D.saves.forEach(function (s) { kinds[s.kind] = (kinds[s.kind] || 0) + 1; });
+      return '<div class="grid">' +
+        '<div class="card stat"><div class="v">' + feats.length + '</div><div class="k">기능</div></div>' +
+        '<div class="card stat"><div class="v">' + count(/✅/) + '</div><div class="k">✅ 동작</div></div>' +
+        '<div class="card stat"><div class="v">' + count(/⚠️/) + '</div><div class="k">⚠️ 문제</div></div>' +
+        '<div class="card stat"><div class="v">' + D.saves.length + '</div><div class="k">저장</div></div>' +
+        '<div class="card stat"><div class="v">' + log.length + '</div><div class="k">작업 기록</div></div>' +
+        (D.data && !D.data.error ? '<div class="card stat"><div class="v">' + D.data.tables.length + '</div><div class="k">데이터 표</div></div>' : "") + "</div>" +
+        (D.dirty.length ? '<div class="card" style="margin-bottom:12px">' + pill("저장 안 된 변경 " + D.dirty.length + "개", "warn") + ' <span class="s">' + D.dirty.slice(0, 8).map(esc).join(", ") + "</span></div>" : "") +
+        doc("NOW", "NOW.md 가 없습니다");
+    }],
+    map: ["한눈에", function () { return mapView(); }],
+    features: ["기능", function () { return doc("FEATURES", "FEATURES.md 가 없습니다"); }],
+    data: ["데이터", function () { return dataView(); }],
+    decisions: ["결정", function () {
+      var rows = decisionRows(N.DECISIONS || "").filter(function (r) { return !/YYYY/.test(r.when); });
+      if (!rows.length) return doc("DECISIONS", "결정 기록이 없습니다");
+      var f = VIEWS.decisions.f || "all";
+      var h = '<div class="filters">' + [["all", "모두"], ["사용자", "사용자가 정함"], ["AI", "AI가 정함"]].map(function (x) {
+        return '<button class="chip" data-dec="' + x[0] + '" aria-pressed="' + (f === x[0]) + '">' + x[1] + "</button>"; }).join("") + "</div>";
+      return h + '<div class="list">' + rows.filter(function (r) { return f === "all" || r.who === f; }).map(function (r) {
+        var quote = /^".*"$/.test(r.why.trim());
+        return '<div class="row"><div class="h">' + (r.who ? whoPill(r.who) : pill("기록", "")) + '<span class="t">' + inline(r.what) + '</span><span class="when">' + esc(r.when) + "</span></div>" +
+          (r.why ? (quote ? '<div class="quote">' + esc(r.why.trim()) + "</div>" : '<div class="s">' + inline(r.why) + "</div>") : "") + "</div>";
+      }).join("") + "</div>";
+    }],
+    log: ["작업 기록", function () {
+      var rows = logRows(N.LOG || "").filter(function (r) { return !/YYYY/.test(r.when); });
+      D.archive.forEach(function (a) { rows = rows.concat(logRows(a.text)); });
+      if (!rows.length) return empty("작업 기록이 아직 없습니다 -- 단계가 끝날 때마다 dev-notes/LOG.md 에 한 줄씩 쌓입니다");
+      var steps = {}, feats = {}; rows.forEach(function (r) { steps[r.step] = 1; if (r.feature) feats[r.feature] = 1; });
+      var f = VIEWS.log.f || "all", ff = VIEWS.log.ff || "";
+      var h = '<p class="s" style="color:var(--muted)">흐름(한 줄씩)입니다. 줄을 누르면 그 기능·날짜의 목록과 자세히가 열립니다.</p><div class="filters">' +
+        ["all"].concat(Object.keys(steps)).map(function (s) {
+        return '<button class="chip" data-step="' + esc(s) + '" aria-pressed="' + (f === s) + '">' + esc(s === "all" ? "모두" : s) + "</button>"; }).join("") +
+        (Object.keys(feats).length ? '<select id="lfeat" aria-label="기능"><option value="">모든 기능</option>' + Object.keys(feats).sort().map(function (k) {
+          return '<option value="' + esc(k) + '"' + (ff === k ? " selected" : "") + ">" + esc(k) + "</option>"; }).join("") + "</select>" : "") + "</div>";
+      return h + '<div class="list">' + rows.filter(function (r) { return (f === "all" || r.step === f) && (!ff || r.feature === ff); }).map(function (r) {
+        var file = r.feature ? FLOG[folder(r.feature) + "/" + r.when.slice(0, 10)] : null;
+        var head = '<div class="h">' + pill(r.step, STEPC[r.step] || "") + (r.feature ? '<span class="s">' + esc(r.feature) + "</span>" : "") +
+          '<span class="t">' + inline(r.what) + "</span>" + resultPill(r.result) + whoPill(r.who) + '<span class="when">' + esc(r.when) + "</span></div>";
+        return file ? '<details class="row"><summary>' + head + '</summary><div class="doc" style="margin-top:8px">' + md(file.text) + "</div></details>"
+                    : '<div class="row">' + head + "</div>";
+      }).join("") + "</div>";
+    }],
+    features_log: ["기능별 기록", function () {
+      if (!D.feature_logs.length) return empty("기능별 기록 파일이 아직 없습니다 -- dev-notes/log/<기능>/<날짜>.md");
+      var byF = {}; D.feature_logs.forEach(function (x) { (byF[x.feature] = byF[x.feature] || []).push(x); });
+      return Object.keys(byF).sort().map(function (k) {
+        return "<h2>" + esc(k.replace(/-/g, " ")) + '</h2><div class="list">' + byF[k].map(function (x) {
+          var items = (x.text.split("## 자세히")[0].match(/^- #\d+.*$/gm) || []).length;
+          return '<details class="row"><summary><div class="h"><span class="t">' + esc(x.date) + '</span><span class="s">목록 ' + items + "줄</span></div></summary>" +
+            '<div class="doc" style="margin-top:8px">' + md(x.text) + "</div></details>";
+        }).join("") + "</div>";
+      }).join("");
+    }],
+    saves: ["저장", function () {
+      if (!D.saves.length) return empty("아직 저장이 없습니다 (git)");
+      return '<p class="s" style="color:var(--muted)">되돌아올 수 있는 지점입니다. 되돌리려면 AI 에게 "○○ 때로 되돌려 줘"라고 말하세요 (light-undo).' +
+        (D.remote ? "" : " 인터넷 저장소는 연결되어 있지 않습니다.") + '</p><div class="list">' + D.saves.map(function (s) {
+        var c = { "기능": "ok", "수정": "ok", "데이터": "ai", "되돌리기": "warn", "중간 저장": "" }[s.kind];
+        return '<div class="row"><div class="h">' + (s.kind ? pill(s.kind, c || "") : "") + '<span class="t">' + esc(s.kind ? s.msg.slice(s.kind.length + 1).trim() : s.msg) + "</span>" +
+          '<span class="when">' + esc(s.at.slice(0, 16).replace("T", " ")) + " · " + esc(s.hash) + "</span></div></div>";
+      }).join("") + "</div>";
+    }],
+    names: ["이름표", function () { return doc("NAMES", "NAMES.md 가 없습니다"); }]
+  };
+  if (N.LEARNED) VIEWS.learned = ["배운 것", function () { return doc("LEARNED", ""); }];
+  if (!D.data) delete VIEWS.data;
+
+  $("nav").innerHTML = Object.keys(VIEWS).map(function (k) { return '<a href="#' + k + '" data-v="' + k + '">' + VIEWS[k][0] + "</a>"; }).join("") +
+    (D.manual ? '<a href="' + esc(D.manual) + '" target="_blank" rel="noopener">사용설명서 ↗</a>' : "");
+
+  function render() {
+    var v = location.hash.slice(1); if (!VIEWS[v]) v = "now";
+    try { $("main").innerHTML = VIEWS[v][1](); }
+    catch (e) { $("main").innerHTML = empty("이 메뉴를 그리지 못했습니다 (" + (e && e.message) + ") -- 기록 파일을 직접 열어 보세요"); }
+    Array.prototype.forEach.call(document.querySelectorAll("nav a[data-v]"), function (a) {
+      if (a.getAttribute("data-v") === v) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-dec]"), function (b) { b.onclick = function () { VIEWS.decisions.f = b.getAttribute("data-dec"); render(); }; });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-step]"), function (b) { b.onclick = function () { VIEWS.log.f = b.getAttribute("data-step"); render(); }; });
+    var lf = document.getElementById("lfeat"); if (lf) lf.onchange = function () { VIEWS.log.ff = lf.value; render(); };
+  }
+  window.addEventListener("hashchange", function () { render(); window.scrollTo(0, 0); });
+  render();
+})();
+</script>
+</body>
+</html>

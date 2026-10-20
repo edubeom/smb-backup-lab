@@ -1,0 +1,13 @@
+{
+  "evidence_source": "operator-provided verification JSON; no key value received",
+  "status": "offsite-key-readback-and-shared-manifest-verified",
+  "run_id": "20261020T040000000000-1234abcd",
+  "verified_at": "2026-10-20T16:06:37.052416+09:00",
+  "offsite_storage_attested_by_operator": true,
+  "key_readback_matches_current_key": true,
+  "shared_encrypted_manifest_decrypted_with_readback_key": true,
+  "offsite_provider_independently_inspected": false,
+  "key_displayed_or_changed": false,
+  "existing_backups_deleted": false,
+  "timer_enabled_by_this_tool": false
+}

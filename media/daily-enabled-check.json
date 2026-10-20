@@ -1,0 +1,18 @@
+{
+  "evidence_source": "operator-provided installation JSON and agent read-only systemctl observation",
+  "status": "daily-backup-enabled",
+  "installed_at": "2026-10-20T17:28:34.472141+09:00",
+  "timer_enabled": "enabled",
+  "timer_active": "active",
+  "next_run_utc": "2026-10-20T19:00:00+00:00",
+  "next_run_kst": "2026-10-21T04:00:00+09:00",
+  "schedule": "04:00 Asia/Seoul",
+  "mount_enabled_for_boot": true,
+  "mount_active_observed": true,
+  "future_retention_approved": true,
+  "backups_deleted_by_installer": false,
+  "services_interrupted": false,
+  "mount_reboot_tested": false,
+  "first_scheduled_run_verified": false,
+  "full_mailu_service_restore_validated": false
+}

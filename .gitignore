@@ -1,0 +1,28 @@
+# Runtime artifacts and credentials never belong in Git
+.env
+.env.*
+!.env.example
+secrets/
+private/
+runtime/
+restore-test/
+*.key
+*.pem
+*.p12
+*.dump
+*.sql
+*.tar*
+*.age
+*.gpg
+*.log
+__pycache__/
+*.pyc
+.venv/
+.manual-review/
+.gnupg/
+*.mp4
+# Pinned upstream synthetic SQL is a skill resource, not a real database dump.
+!.agents/skills/data-light/examples/shop/data/out/schema.sql
+!.claude/skills/data-light/examples/shop/data/out/schema.sql
+
+.publication-managed.json

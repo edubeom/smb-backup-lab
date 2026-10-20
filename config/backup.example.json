@@ -1,0 +1,15 @@
+{
+  "enabled": false,
+  "archive_layout": "objects-v2",
+  "host": "REPLACE_WITH_VERIFIED_HOSTNAME",
+  "mount": "/mnt/router-backup",
+  "mount_source": "//192.0.2.1/backup",
+  "repository": "/mnt/router-backup/server/g1",
+  "repository_id": "REPLACE-WITH-RANDOM-ID",
+  "work": "/var/lib/g1-backup/work",
+  "prepared": "/var/lib/g1-backup/prepared",
+  "password_file": "/etc/g1-backup/archive-passphrase",
+  "reserve_bytes": 10737418240,
+  "max_repository_bytes": 107374182400,
+  "prepared_max_age_seconds": 21600
+}

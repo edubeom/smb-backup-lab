@@ -1,0 +1,335 @@
+{
+  "format": "data-light/1",
+  "project": "반찬가게 주문",
+  "db": "sqlite",
+  "product": {
+    "kinds": [
+      "manage",
+      "analyze"
+    ],
+    "main": "manage",
+    "said": "주문을 받아 적어 두고 찾아보고 싶어요. 손님별로 얼마 주문했는지도 보고 싶고요",
+    "main_said": "주문 관리가 제일 중요해요"
+  },
+  "goals": [
+    {
+      "say": "손님별 주문 금액 합계를 볼 수 있다",
+      "sql": "SELECT c.nickname, SUM(i.qty * i.unit_price) FROM customer c JOIN orders o ON o.customer_id = c.customer_id JOIN order_item i ON i.orders_id = o.orders_id GROUP BY c.nickname",
+      "expect": [
+        [
+          "옆집",
+          10000
+        ]
+      ]
+    },
+    {
+      "say": "판매 중인 반찬만 골라 볼 수 있다",
+      "sql": "SELECT dish_name FROM dish WHERE on_sale",
+      "expect": [
+        [
+          "멸치볶음"
+        ]
+      ]
+    },
+    {
+      "say": "주문 상태별 건수를 셀 수 있다",
+      "sql": "SELECT status, COUNT(*) FROM orders GROUP BY status",
+      "expect": [
+        [
+          "접수",
+          1
+        ]
+      ]
+    }
+  ],
+  "not_doing": [
+    "결제",
+    "배송 추적",
+    "회원 로그인"
+  ],
+  "works": [
+    {
+      "name": "주문 받기",
+      "who": "사장님",
+      "say": "손님이 전화로 주문하면 반찬과 수량을 적는다",
+      "screen": "주문 입력",
+      "uses": {
+        "orders": "C",
+        "order_item": "C",
+        "customer": "R",
+        "dish": "R"
+      }
+    },
+    {
+      "name": "손님 관리",
+      "who": "사장님",
+      "say": "단골 손님의 별명·연락처를 적고 고친다",
+      "screen": "손님 목록",
+      "uses": {
+        "customer": "CRU",
+        "pi_customer": "CRU"
+      }
+    },
+    {
+      "name": "반찬 관리",
+      "who": "사장님",
+      "say": "반찬과 값, 오늘 파는지를 정한다",
+      "screen": "반찬 목록",
+      "uses": {
+        "dish": "CRU"
+      }
+    },
+    {
+      "name": "주문 상태 바꾸기",
+      "who": "사장님",
+      "say": "접수 → 준비 → 전달로 상태를 바꾼다",
+      "screen": "주문 목록",
+      "uses": {
+        "orders": "RU",
+        "order_item": "R"
+      }
+    },
+    {
+      "name": "매출 보기",
+      "who": "사장님",
+      "say": "손님별·상태별 주문 금액을 본다",
+      "screen": "매출",
+      "uses": {
+        "orders": "R",
+        "order_item": "R",
+        "customer": "R"
+      }
+    }
+  ],
+  "tables": [
+    {
+      "name": "customer",
+      "label": "손님",
+      "about": "주문하는 손님",
+      "columns": [
+        {
+          "name": "customer_id",
+          "label": "손님 번호",
+          "type": "id"
+        },
+        {
+          "name": "nickname",
+          "label": "별명",
+          "type": "text",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "grade",
+          "label": "등급",
+          "type": "text",
+          "required": true,
+          "choices": [
+            "일반",
+            "단골"
+          ],
+          "default": "일반"
+        }
+      ],
+      "sample": [
+        {
+          "customer_id": 1,
+          "nickname": "옆집",
+          "grade": "단골"
+        },
+        {
+          "customer_id": 2,
+          "nickname": "회사앞"
+        }
+      ]
+    },
+    {
+      "name": "pi_customer",
+      "label": "손님 개인정보",
+      "about": "손님의 개인정보. 본 테이블과 1:1, 본 행을 지우면 같이 지워진다",
+      "columns": [
+        {
+          "name": "customer_id",
+          "label": "손님 번호",
+          "type": "ref",
+          "ref": "customer",
+          "key": true,
+          "on_delete": "delete"
+        },
+        {
+          "name": "full_name",
+          "label": "이름",
+          "type": "text",
+          "required": true,
+          "personal": "name"
+        },
+        {
+          "name": "phone",
+          "label": "전화번호",
+          "type": "text",
+          "personal": "phone"
+        }
+      ],
+      "sample": [
+        {
+          "full_name": "김하나",
+          "phone": "010-0000-0001",
+          "customer_id": 1
+        },
+        {
+          "full_name": "이두리",
+          "customer_id": 2
+        }
+      ]
+    },
+    {
+      "name": "dish",
+      "label": "반찬",
+      "about": "파는 반찬",
+      "columns": [
+        {
+          "name": "dish_id",
+          "label": "반찬 번호",
+          "type": "id"
+        },
+        {
+          "name": "dish_name",
+          "label": "반찬 이름",
+          "type": "text",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "price",
+          "label": "가격",
+          "type": "money",
+          "required": true
+        },
+        {
+          "name": "on_sale",
+          "label": "판매 중",
+          "type": "bool",
+          "required": true,
+          "default": true
+        }
+      ],
+      "sample": [
+        {
+          "dish_id": 1,
+          "dish_name": "멸치볶음",
+          "price": 5000
+        },
+        {
+          "dish_id": 2,
+          "dish_name": "장조림",
+          "price": 7000,
+          "on_sale": false
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "label": "주문",
+      "about": "손님의 주문 한 건",
+      "columns": [
+        {
+          "name": "orders_id",
+          "label": "주문 번호",
+          "type": "id"
+        },
+        {
+          "name": "customer_id",
+          "label": "주문한 손님",
+          "type": "ref",
+          "ref": "customer",
+          "required": true
+        },
+        {
+          "name": "order_date",
+          "label": "주문일",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "status",
+          "label": "상태",
+          "type": "text",
+          "required": true,
+          "choices": [
+            "접수",
+            "준비",
+            "완료",
+            "취소"
+          ]
+        },
+        {
+          "name": "memo",
+          "label": "요청사항",
+          "type": "long_text"
+        }
+      ],
+      "sample": [
+        {
+          "orders_id": 1,
+          "customer_id": 1,
+          "order_date": "2026-10-14",
+          "status": "접수"
+        }
+      ]
+    },
+    {
+      "name": "order_item",
+      "label": "주문 항목",
+      "about": "주문 한 건에 담긴 반찬",
+      "columns": [
+        {
+          "name": "order_item_id",
+          "label": "항목 번호",
+          "type": "id"
+        },
+        {
+          "name": "orders_id",
+          "label": "주문",
+          "type": "ref",
+          "ref": "orders",
+          "required": true,
+          "on_delete": "delete"
+        },
+        {
+          "name": "dish_id",
+          "label": "반찬",
+          "type": "ref",
+          "ref": "dish",
+          "required": true
+        },
+        {
+          "name": "qty",
+          "label": "수량",
+          "type": "int",
+          "required": true,
+          "default": 1
+        },
+        {
+          "name": "unit_price",
+          "label": "단가",
+          "type": "money",
+          "required": true
+        }
+      ],
+      "sample": [
+        {
+          "orders_id": 1,
+          "dish_id": 1,
+          "qty": 2,
+          "unit_price": 5000
+        }
+      ],
+      "unique": [
+        [
+          "orders_id",
+          "dish_id"
+        ]
+      ]
+    }
+  ]
+}
