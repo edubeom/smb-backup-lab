@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T19:27:05.240144+09:00",
+  "generated_at": "2026-10-21T08:46:21.108693+09:00",
   "slide_count": 26,
   "pptx_notes_verified": true,
   "pdf_pages_verified": true,
@@ -10,17 +10,17 @@
   ],
   "main_seconds": 1315,
   "files_sha256": {
-    "README.md": "78c472945acf4d6239fe0ccbfbe5b4a57239a98fb10ebbb471ee2faf05d0d672",
+    "README.md": "d31a99068161ca43f84baeff04b26ddb7d7bd9bda484e5340b09e03c821d14f6",
     "assets/17-config-compatibility.png": "560ac3d37c70045bfc2cc01eccb5ce04b9388577e0f5996db755af36833c2da5",
     "assets/18-daily-enabled.png": "9d5d3d6f0822797b52011fd95b8c1c08d6b51399105d462f64427adae7cccb7c",
     "assets/broadcast.css": "25901fc4dfc24f9ef285b21fee2de052178078908c24abe925b5d88685501faa",
     "assets/manual.css": "25f0d5c9d89b538c78c0d52761ff0057bfb5c9df82fd972422c88bd1a4adc845",
     "assets/manual.js": "082df3a3c684bd52d0e3a626d45c5b060cc5b2051ef85f264d96c631046b586e",
     "broadcast-runbook.md": "1fa29c7c20b3dc3e8f1d28c608daf8b8210df9cea21aa5a2789caf369c2ff838",
-    "deck.json": "cfbc89e005f1a38cbe5da81c85a0dfe6bd15210c31fbe64a93c3202c92e9f4c8",
+    "deck.json": "32f57f6b058e3fdfce8e0ae2b98e3dcff4055a95a8f50a7a8b6f35bb0605037e",
     "demo-script.md": "13306dc20000d0b22a9ea9d78833f7eb82542c02189b56d32baa9f2ebeccf8af",
-    "lecture.html": "1c417fe9c62b6f02aebe9a857ee846f73ff576959960873c107898da9ca6ce61",
-    "previews/contact-sheet.jpg": "a304c0fa7c9aaa9e6ebdbd27a8cc8d49905a90e39f088c967d8c09c117517295",
+    "lecture.html": "d913f9c7ad23afaa7a11ca58fa38568a3c58081ca30b6573495ce46ca62b52c0",
+    "previews/contact-sheet.jpg": "c80420e06efe4c3326b35b434cad901c928e27d1ebae6cbfed419657b8410466",
     "slides/01.png": "00d46a5d3276c94acedeb937d944e751f7cb4dcc9c2f1bc12c3cfbd01119713c",
     "slides/02.png": "5bbf460894c66b5371ddf58028eb64782db3e73bcbc697b431643fa33af8051b",
     "slides/03.png": "8d7eb3e7d13393d9c1dae2d0a35b6ed8fc88067f1ea19551783b83be9a466550",
@@ -45,12 +45,12 @@
     "slides/22.png": "bd849ea41032cc8fe75305fc67ccf65b213cc2756bcb8bdcc51d19cbb226a659",
     "slides/23.png": "3ad96e7594b123caaf26afc5de7cb6993fcad9f586baa5d1410407b1cd6b8cf0",
     "slides/24.png": "680f540ea08f685ee32c54439347c0b096b024f5eb4034f22ee05e707f8560cb",
-    "slides/25.png": "757f557471c6567778376f92f93fa986a2632c70e7edf06ff3c53129910ffab6",
+    "slides/25.png": "e6b6beb021ea12398ee65cb05dc78e4cbf21530c6d70f4733a7fd6ce05a90ded",
     "slides/26.png": "00ec1e534d34e4ebe99c920c5f17184c743e91024c086f7845a30baeddc32eb8",
-    "smb-backup-lab-dev-process-light.pdf": "f969dd49a2593c04869389fb5eac350d6e30d7a5daa5d4e6ea6bf530ef4654db",
-    "smb-backup-lab-dev-process-light.pptx": "ce9a60c9c07dfbe85ee6b5cdbf055896ea0787cbe37ebc1071b4a3c7bbfcb28e",
+    "smb-backup-lab-dev-process-light.pdf": "8477630200c0e37b7de4925b5baff68d62b132aaae11808bc826ca318cfe0a9b",
+    "smb-backup-lab-dev-process-light.pptx": "a2b9cc1463eec2741d2eeae386222e07b27e517171622e793596b052a77210c0",
     "speaker-notes.md": "9bba58196450c12e44c7ae67c801cf3f062d374bb996627197de197c87c81e29",
-    "youtube-description.md": "8e84de9635ac774ed3af490bb39a0fe2ce2c209633dd0a7c4f2ef0550bba1e31"
+    "youtube-description.md": "0d3627e5c2557449dbfd56315590e6093ffa85b4af47d20ad1fa862e775d06de"
   },
   "publication_note": "Public text identifiers sanitized; original production history excluded."
 }

@@ -4,7 +4,7 @@
 SMB 공유에 Linux 서버를 암호화 백업하는 dev-process-light 실제 적용 사례다.
 - 누가 쓰나: 서버 운영자와 사례를 읽는 개발자
 - 로그인: 실제 운영 인증은 공개 저장소에 없음
-- 올리는 곳: GitHub sungbeom78/smb-backup-lab
+- 올리는 곳: GitHub edubeom/smb-backup-lab
 - 저장하는 데이터: 합성 시험·파일 백업 메타데이터, 새 업무 DB 없음
 - 개인정보: 공개 식별자는 예시로 바꿨고 실제 메일/DB/키는 없음
 
@@ -19,3 +19,8 @@ SMB 공유에 Linux 서버를 암호화 백업하는 dev-process-light 실제 �
 - 인터넷 저장소에 올리기(push): 이번 공개본 게시 요청으로 허용, 이후 작업은 현재 사용자의 지시를 따른다
 - 기록 보기 페이지: 별도 생성하지 않음
 - 데이터 검사 장치: 적용 대상 새 업무 DB 없음
+
+연락처: hello@edubeom.com · 저장소: https://github.com/edubeom/smb-backup-lab
+
+## 현재 소유자 갱신
+2026-10-21: 저장소 edubeom/smb-backup-lab, 작성자 edubeom, 연락처 hello@edubeom.com. 합성123개·32쪽안내·강의26쪽/노트·공개패키지를검사했다. 원본프레임워크주소/라이선스/과거Git작성자는보존한다.

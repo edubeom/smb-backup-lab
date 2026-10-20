@@ -294,7 +294,7 @@
     {
       "title": "기록은 다음 복구와 다음 개발을 돕습니다",
       "chapter": "CLOSING",
-      "body": "<div class=\"closing\"><p>요구 → 코드 → 실행 증거 → 다음 작업</p><div class=\"links\">github.com/sungbeom78/dev-process-light<br>github.com/sungbeom78/smb-backup-lab</div><div class=\"tag\">적용 버전 고정 · 확인 범위 공개 · 비밀 없는 자료</div></div>",
+      "body": "<div class=\"closing\"><p>요구 → 코드 → 실행 증거 → 다음 작업</p><div class=\"links\">dev-process-light 원본 · 설명란 링크<br>github.com/edubeom/smb-backup-lab<br>hello@edubeom.com</div><div class=\"tag\">적용 버전 고정 · 확인 범위 공개 · 비밀 없는 자료</div></div>",
       "notes": "오늘 사례의 핵심은 요구가 코드로 이어지고 실행 증거가 다시 다음 작업으로 이어졌다는 점입니다. 기록은 영상을 만들 때도 도움이 됐지만 복구를 준비하고 오류를 재현할 때 더 직접적으로 쓰였습니다. 원본 dev-process-light와 smb-backup-lab 링크는 화면과 설명란에 넣었습니다. 확인하지 않은 부분은 계속 남은 시험으로 표시하겠습니다. 여러분의 작은 프로젝트에서도 이 흐름을 한 번 적용해 보시면 좋겠습니다.",
       "seconds": 35,
       "kind": "cover",

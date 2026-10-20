@@ -54,3 +54,5 @@ python3 -m unittest discover -s tests -v
 
 ## 공개와 비밀
 실제 자격증명/키/메일/DB/원본 조사/운영 Git 이력은 공개하지 않습니다. 예시로 바꾼 범위와 시험의 배포 경로 patch는 [공개본 설명](docs/publication.md)에 적었습니다. 녹음·영상 완성본·유튜브 업로드는 포함하지 않습니다.
+
+연락처: hello@edubeom.com · 저장소: https://github.com/edubeom/smb-backup-lab

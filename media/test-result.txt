@@ -123,7 +123,7 @@ test_noninteractive_root_does_not_request_password (test_setup.SetupSafetyTests.
 test_nonroot_has_no_system_side_effect (test_setup.SetupSafetyTests.test_nonroot_has_no_system_side_effect) ... ok
 
 ----------------------------------------------------------------------
-Ran 123 tests in 16.451s
+Ran 123 tests in 16.525s
 
 OK
 공유 계정: backup-user · 새 비밀번호 입력 1/3

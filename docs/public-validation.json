@@ -1,11 +1,17 @@
 {
-  "source": "public sanitized checkout actual execution",
-  "tests": 123,
-  "status": "passed",
-  "runtime_seconds": 16.451,
+  "checked_on": "2026-10-21",
+  "repository": "https://github.com/edubeom/smb-backup-lab",
+  "owner": "edubeom",
+  "contact_email": "hello@edubeom.com",
+  "source_git_base": "0bfc61fc2091819fdb3f817a05db5d00b76f076a",
+  "tests": {
+    "count": 123,
+    "result": "passed",
+    "seconds": 16.525,
+    "transcript_sha256": "3d4ff0f16ce5171dc63a5423024b6ceddf003d3309b1a25e84cab2e674296903"
+  },
   "manual_pages": 32,
-  "presentation_slides": 26,
-  "pptx_speaker_notes_verified": true,
-  "first_scheduled_backup_verified": false,
-  "full_mailu_service_restore_validated": false
+  "pptx_slides": 26,
+  "framework_and_license_unchanged": true,
+  "production_operations_performed": false
 }
