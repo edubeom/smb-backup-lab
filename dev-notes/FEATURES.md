@@ -7,7 +7,7 @@
 |강의 자료|scripts/build_broadcast.py, media/broadcast/2026-10-20/|26쪽·노트/PDF/화면 검사|
 
 ## 프로젝트 표시
-config/project-identity.json, docs/identity-and-contact.md, scripts/build_broadcast.py, scripts/build_demo_video.py — 소유자/연락처와 교육 자료 표기를 확인한다.
+config/project-identity.json, docs/framework-transfer-check.json, docs/identity-and-contact.md, scripts/build_broadcast.py, scripts/build_demo_video.py — 소유자/연락처와 교육 자료 표기를 확인한다.
 
 ## 데이터 (표)
 새 업무 DB 없음. 기존 DB는 백업과 격리 복원 대상으로 다룬다.
