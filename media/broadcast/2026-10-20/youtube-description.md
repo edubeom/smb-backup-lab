@@ -6,7 +6,7 @@ AI와 만드는 서버 백업 — dev-process-light 실전 적용기 | smb-backu
 ## 설명란
 AI와 프로젝트를 이어갈 때 필요한 작업 카드·검증·기록·Git 저장을 서버 백업 개발 사례로 소개합니다. SMB 연결 오류, 중단 없는 메일 수집, 실제 DB 복구 확인과 사용자 피드백까지 어떻게 기록했는지 보여 드립니다.
 
-- 원본 dev-process-light: https://github.com/sungbeom78/dev-process-light
+- 원본 dev-process-light: https://github.com/edubeom/dev-process-light
 - 사례 코드와 방송 자료: https://github.com/edubeom/smb-backup-lab
 - 작성자: edubeom · 연락처: hello@edubeom.com
 - 적용 버전: 4bca879961e5a5d1fda52acaf2ecf85fce6f428f

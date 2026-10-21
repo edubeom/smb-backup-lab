@@ -107,7 +107,7 @@ add('여러분의 작은 작업에도 적용해 보세요','TAKEAWAY',flow([
     '백업 도구 전체를 그대로 도입할 필요는 없습니다. 먼저 원본 dev-process-light 저장소에서 설치 안내를 읽고 작은 작업 하나에 적용해 보세요. 완료 기준을 세 가지 정도로 적고, 합성 자료로 성공과 실패를 확인한 뒤, 설명서와 기록을 같은 Git 저장에 넣어 봅니다. 이 사례의 공개 코드는 특정 서버 구성을 일반 예시 이름으로 바꾼 학습 자료입니다. 실제 설치에는 자신의 경로와 서비스 구성을 확인하고 별도 검증해야 합니다.',50)
 add('기록은 다음 복구와 다음 개발을 돕습니다','CLOSING',
     '<div class="closing"><p>요구 → 코드 → 실행 증거 → 다음 작업</p><div class="links">dev-process-light 원본 · 설명란 링크<br>github.com/edubeom/smb-backup-lab<br>hello@edubeom.com</div><div class="tag">적용 버전 고정 · 확인 범위 공개 · 비밀 없는 자료</div></div>',
-    '오늘 사례의 핵심은 요구가 코드로 이어지고 실행 증거가 다시 다음 작업으로 이어졌다는 점입니다. 기록은 영상을 만들 때도 도움이 됐지만 복구를 준비하고 오류를 재현할 때 더 직접적으로 쓰였습니다. 원본 dev-process-light와 smb-backup-lab 링크는 화면과 설명란에 넣었습니다. 확인하지 않은 부분은 계속 남은 시험으로 표시하겠습니다. 여러분의 작은 프로젝트에서도 이 흐름을 한 번 적용해 보시면 좋겠습니다.',35,'cover')
+    '오늘 사례의 핵심은 요구가 코드로 이어지고 실행 증거가 다시 다음 작업으로 이어졌다는 점입니다. 기록은 영상을 만들 때도 도움이 됐지만 복구를 준비하고 오류를 재현할 때 더 직접적으로 쓰였습니다. 원본 dev-process-light와 smb-backup-lab 링크는 화면과 설명란에 넣었습니다. 확인하지 않은 부분은 계속 남은 시험으로 표시하겠습니다. 여러분의 작은 프로젝트에서도 이 흐름을 한 번 적용해 보시면 좋겠습니다. 원본 개발 규칙: https://github.com/edubeom/dev-process-light . 짝 데이터 설계 스킬: https://github.com/edubeom/data-expert-framework-light .',35,'cover')
 add('부록 · 자주 받는 질문','Q&A',
     '<table class="grid"><tr><th>질문</th><th>이번 사례의 답</th></tr><tr><td>다른 저장소도 지원하나요?</td><td>현재 구현 대상은 SMB 공유입니다.</td></tr><tr><td>서버 전체를 바로 부팅하나요?</td><td>OS 재설치 후 설정·데이터 복원이 목표입니다.</td></tr><tr><td>메일 전체 복구를 끝냈나요?</td><td>SQLite·우편함 읽기 확인, 전체 로그인/송수신은 별도입니다.</td></tr><tr><td>실패한 날 이전 성공본을 지우나요?</td><td>새 성공 검증이 없으면 보관 정리를 하지 않습니다.</td></tr></table>',
     '질의응답에서 자주 나올 수 있는 범위를 정리했습니다. 현재 대상은 SMB 공유이며 다른 저장소 지원을 구현했다고 소개하지 않습니다. 서버 전체를 부팅 가능하게 복제하는 백업도 아닙니다. 메일은 확인한 SQLite와 우편함 읽기, 남은 전체 서비스 검증을 구분합니다. 실패한 날에는 새 성공본 검증이 없으므로 기존 성공본 보관 정리가 진행되지 않습니다. 이 페이지는 본편 시간에서 제외한 선택 부록입니다.',0)
@@ -209,9 +209,9 @@ PPTX 화면은 글꼴과 배치를 보존한 이미지형 슬라이드이며 발
 
 현재 작성자: edubeom · 연락처: hello@edubeom.com
 
-적용 원본: https://github.com/sungbeom78/dev-process-light (MIT, 원본 라이선스 보존). 이 강의는 원본 방법을 실제 사례에 적용한 설명이며 원본 저장소의 공식 강의라는 뜻은 아닙니다.
+적용 원본: https://github.com/edubeom/dev-process-light (MIT, 원본 라이선스 보존). 이 강의는 원본 방법을 실제 사례에 적용한 설명이며 원본 저장소의 공식 강의라는 뜻은 아닙니다.
 ''')
-    (OUT/'deck.json').write_text(json.dumps({'title':'dev-process-light × smb-backup-lab','upstream':UPSTREAM,'upstream_commit':PIN,'slides':DECK,'recommended_main_seconds':elapsed},ensure_ascii=False,indent=2)+'\n')
+    (OUT/'deck.json').write_text(json.dumps({'title':'dev-process-light × smb-backup-lab','upstream':UPSTREAM,'upstream_commit':PIN,'data_light_upstream':IDENTITY['data_framework_repository'],'data_light_commit':IDENTITY['data_framework_commit'],'slides':DECK,'recommended_main_seconds':elapsed},ensure_ascii=False,indent=2)+'\n')
     # A lecture chapter in the operator manual links to the canonical assets.
     link='../media/broadcast/2026-10-20/'
     local=document.replace('href="assets/',f'href="{link}assets/').replace('src="assets/',f'src="{link}assets/').replace('data-index="lecture.html"','data-index="index.html"')

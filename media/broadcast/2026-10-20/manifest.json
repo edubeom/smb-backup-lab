@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-21T08:46:21.108693+09:00",
+  "generated_at": "2026-10-21T09:43:48.912926+09:00",
   "slide_count": 26,
   "pptx_notes_verified": true,
   "pdf_pages_verified": true,
@@ -10,16 +10,16 @@
   ],
   "main_seconds": 1315,
   "files_sha256": {
-    "README.md": "d31a99068161ca43f84baeff04b26ddb7d7bd9bda484e5340b09e03c821d14f6",
+    "README.md": "adca632b11522f56926eeeef73ac0c460981f6c55db849ff181b9fd9d1171517",
     "assets/17-config-compatibility.png": "560ac3d37c70045bfc2cc01eccb5ce04b9388577e0f5996db755af36833c2da5",
     "assets/18-daily-enabled.png": "9d5d3d6f0822797b52011fd95b8c1c08d6b51399105d462f64427adae7cccb7c",
     "assets/broadcast.css": "25901fc4dfc24f9ef285b21fee2de052178078908c24abe925b5d88685501faa",
     "assets/manual.css": "25f0d5c9d89b538c78c0d52761ff0057bfb5c9df82fd972422c88bd1a4adc845",
     "assets/manual.js": "082df3a3c684bd52d0e3a626d45c5b060cc5b2051ef85f264d96c631046b586e",
     "broadcast-runbook.md": "1fa29c7c20b3dc3e8f1d28c608daf8b8210df9cea21aa5a2789caf369c2ff838",
-    "deck.json": "32f57f6b058e3fdfce8e0ae2b98e3dcff4055a95a8f50a7a8b6f35bb0605037e",
+    "deck.json": "2b546a2ac67a82f99d68a35bfe33ba87eb3f9a3db63378274e03f1a90c22a780",
     "demo-script.md": "13306dc20000d0b22a9ea9d78833f7eb82542c02189b56d32baa9f2ebeccf8af",
-    "lecture.html": "d913f9c7ad23afaa7a11ca58fa38568a3c58081ca30b6573495ce46ca62b52c0",
+    "lecture.html": "db8e17d08748f6d493c78f4b848312a9baefb7e83b68110be80423cb55d1c3d4",
     "previews/contact-sheet.jpg": "c80420e06efe4c3326b35b434cad901c928e27d1ebae6cbfed419657b8410466",
     "slides/01.png": "00d46a5d3276c94acedeb937d944e751f7cb4dcc9c2f1bc12c3cfbd01119713c",
     "slides/02.png": "5bbf460894c66b5371ddf58028eb64782db3e73bcbc697b431643fa33af8051b",
@@ -47,10 +47,10 @@
     "slides/24.png": "680f540ea08f685ee32c54439347c0b096b024f5eb4034f22ee05e707f8560cb",
     "slides/25.png": "e6b6beb021ea12398ee65cb05dc78e4cbf21530c6d70f4733a7fd6ce05a90ded",
     "slides/26.png": "00ec1e534d34e4ebe99c920c5f17184c743e91024c086f7845a30baeddc32eb8",
-    "smb-backup-lab-dev-process-light.pdf": "8477630200c0e37b7de4925b5baff68d62b132aaae11808bc826ca318cfe0a9b",
-    "smb-backup-lab-dev-process-light.pptx": "a2b9cc1463eec2741d2eeae386222e07b27e517171622e793596b052a77210c0",
-    "speaker-notes.md": "9bba58196450c12e44c7ae67c801cf3f062d374bb996627197de197c87c81e29",
-    "youtube-description.md": "0d3627e5c2557449dbfd56315590e6093ffa85b4af47d20ad1fa862e775d06de"
+    "smb-backup-lab-dev-process-light.pdf": "4e8edc342ae300230191aab88a831e09420c06f165041ea7618a0cfcff24e9a3",
+    "smb-backup-lab-dev-process-light.pptx": "a2a92ccb492e6dbfd8c3ed5624e80523efb88f4050cd641d34171f692d2da4f3",
+    "speaker-notes.md": "f5973bd3d39aeeaf7ef4e06d40713e1d7502525b643f6e308dee5ee3a453a0b3",
+    "youtube-description.md": "f2e0203b67a9a66877067f444fc7111dedaaca246478ea486b2d87d1496807c0"
   },
-  "publication_note": "Public text identifiers sanitized; original production history excluded."
+  "publication_note": "Public source links updated after verified framework transfer; installed pinned versions preserved."
 }

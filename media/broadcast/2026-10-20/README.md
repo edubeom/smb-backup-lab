@@ -16,4 +16,4 @@ PPTX 화면은 글꼴과 배치를 보존한 이미지형 슬라이드이며 발
 
 현재 작성자: edubeom · 연락처: hello@edubeom.com
 
-적용 원본: https://github.com/sungbeom78/dev-process-light (MIT, 원본 라이선스 보존). 이 강의는 원본 방법을 실제 사례에 적용한 설명이며 원본 저장소의 공식 강의라는 뜻은 아닙니다.
+적용 원본: https://github.com/edubeom/dev-process-light (MIT, 원본 라이선스 보존). 이 강의는 원본 방법을 실제 사례에 적용한 설명이며 원본 저장소의 공식 강의라는 뜻은 아닙니다.

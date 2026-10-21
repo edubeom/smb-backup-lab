@@ -241,7 +241,7 @@ def refresh_identity():
     provenance=json.loads(path.read_text())
     provenance['identity_update']={'updated_at':now(),'owner':IDENTITY['owner'],'contact_email':IDENTITY['contact_email'],
                                    'repository':URL,'original_test_recording_preserved':True,
-                                   'framework_link_note':'Actual source repository retained; source has not moved.'}
+                                   'framework_link_note':'Source repository moved to edubeom; pinned source version is preserved.'}
     put_json(path,provenance)
     print('Identity card refreshed; original synthetic test evidence preserved',flush=True)
 
@@ -393,7 +393,7 @@ GitHub/HTML 키 조작은 소유자 변경 후 다시 촬영했습니다. 합성
 
 프로젝트의 `scripts/build_demo_video.py`를 requirements-media.txt 도구 환경에서 실행합니다. `--capture`는 공개 브라우저 촬영과 합성 시험을 새로 실행합니다. `--render`는 기존 촬영/설명 카드와 타임라인을 영상으로, `--package`는 영상 포함PPTX/대본을 만듭니다. `--verify`는 디코딩/길이/해상도/PPTX 파일·원본 해시를 확인하고 ZIP을 만듭니다. 기본값은 모든 단계입니다. 원본 WebM은 무음이며 속도 변경 없이 발췌합니다. 과거 서버 실행을 재연한 것처럼 소개하지 마세요.
 
-출처: https://github.com/sungbeom78/dev-process-light · https://github.com/edubeom/smb-backup-lab
+출처: https://github.com/edubeom/dev-process-light · https://github.com/edubeom/smb-backup-lab
 ''')
     (OUT/'index.html').write_text('''<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>smb-backup-lab 시연 영상</title><style>*{box-sizing:border-box}body{margin:0;background:#102c41;color:#edf6fa;font:18px/1.65 "Noto Sans CJK KR",sans-serif;padding:28px 5vw}main{max-width:1400px;margin:auto}h1{font-size:32px;margin:0}p{color:#b9d3df}.row{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}button,a{background:#1d4d59;border:1px solid #73d7c5;border-radius:10px;color:#f0fbf8;padding:10px 18px;font:inherit;text-decoration:none;cursor:pointer}button[aria-pressed=true]{background:#77dec9;color:#102c41}video{display:block;width:100%;aspect-ratio:16/9;background:#091a28;border-radius:14px}.links{margin-top:25px}.links a{display:inline-block;margin:6px 8px 6px 0}small{color:#b9d3df}</style>

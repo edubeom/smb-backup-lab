@@ -1,6 +1,6 @@
 # smb-backup-lab
 
-**Built with [dev-process-light](https://github.com/sungbeom78/dev-process-light)** — 작업 카드·직접 확인·기록·Git 저장을 실제 SMB 백업 개발에 적용했습니다.
+**Built with [dev-process-light](https://github.com/edubeom/dev-process-light)** — 작업 카드·직접 확인·기록·Git 저장을 실제 SMB 백업 개발에 적용했습니다.
 
 Linux 서버의 프로젝트·설정·PostgreSQL·메일을 암호화해 **SMB 공유**에 저장하는 실제 개발 사례입니다. 프로젝트별 파일, 공유기 되읽기/복호화 확인, 최근 성공 한국 날짜5개 보관, 별도 DB 복구 검증을 다룹니다.
 

@@ -2,6 +2,8 @@
   "owner": "edubeom",
   "contact_email": "hello@edubeom.com",
   "repository": "https://github.com/edubeom/smb-backup-lab",
-  "framework_repository": "https://github.com/sungbeom78/dev-process-light",
-  "framework_commit": "4bca879961e5a5d1fda52acaf2ecf85fce6f428f"
+  "framework_repository": "https://github.com/edubeom/dev-process-light",
+  "framework_commit": "4bca879961e5a5d1fda52acaf2ecf85fce6f428f",
+  "data_framework_repository": "https://github.com/edubeom/data-expert-framework-light",
+  "data_framework_commit": "9fa702a123e5e525d43212c280dfa7180ab4066a"
 }

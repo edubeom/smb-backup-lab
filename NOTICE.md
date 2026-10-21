@@ -1,7 +1,8 @@
 # 출처와 적용 범위
 
 이 프로젝트는 **dev-process-light를 사용해 개발한 실제 사례**다.
-- 원본: https://github.com/sungbeom78/dev-process-light
+- 원본: https://github.com/edubeom/dev-process-light
+- 짝 스킬 원본: https://github.com/edubeom/data-expert-framework-light
 - 적용 commit: 4bca879961e5a5d1fda52acaf2ecf85fce6f428f
 - 설치 원본: light 스킬7개와 짝 스킬 data-light0.7.0
 - MIT 고지: DEV-PROCESS-LIGHT-LICENSE. 포함한 원본 스킬/자산은 고지와 함께 보존한다.
